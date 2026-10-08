@@ -115,10 +115,4 @@
       resultBox.scrollIntoView({ behavior: 'smooth' });
     }
   </script>
-  const formData = new FormData();
-formData.append("file", fileInput.files[0]);
-const response = await fetch("https://your-api-url.onrender.com/predict", {
-  method: "POST",
-  body: formData
-});
-const data = await response.json();
+  
