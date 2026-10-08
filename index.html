@@ -1,342 +1,152 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgriLens AI | KisanDrishti - Instant Plant Disease Detection</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Kannada:wght@400;600;700&family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
-  
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            hindi: ['"Noto Sans Devanagari"', 'sans-serif'],
-            kannada: ['"Noto Sans Kannada"', 'sans-serif'],
-            telugu: ['"Noto Sans Telugu"', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              200: '#bbf7d0',
-              300: '#86efac',
-              400: '#4ade80',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
-              800: '#166534',
-              900: '#14532d',
-              950: '#052e16',
-            },
-            leaf: {
-              amber: '#d97706',
-              rust: '#dc2626',
-              emerald: '#059669',
-              slate: '#0f172a'
-            }
-          }
-        }
-      }
-    }
-  </script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgriLens AI - Leaf Scanner</title>
   <style>
-    .scan-line {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, transparent, #22c55e, #86efac, transparent);
-      box-shadow: 0 0 15px #4ade80;
-      animation: scanAnimation 2.2s ease-in-out infinite alternate;
-    }
-    @keyframes scanAnimation {
-      0% { top: 0%; opacity: 0.3; }
-      50% { opacity: 1; }
-      100% { top: 96%; opacity: 0.3; }
-    }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #86efac;
-      border-radius: 9999px;
-    }
-    .backdrop-blur-nav {
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0d1117; color: #f0f6fc; padding: 14px; min-height: 100vh; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 480px; }
+    .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 12px; }
+    .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.2rem; color: #fff; }
+    .logo-badge { background: #238636; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .lang-pill { background: #161b22; border: 1px solid #30363d; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; color: #c9d1d9; }
+    .terminal-tag { display: inline-block; background: #0f2d1e; color: #3fb950; border: 1px solid #238636; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 10px; }
+    h1 { font-size: 1.55rem; font-weight: 800; line-height: 1.25; margin-bottom: 8px; }
+    p.subtitle { color: #8b949e; font-size: 0.88rem; line-height: 1.4; margin-bottom: 18px; }
+    .scanner-card { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+    .card-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; color: #e6edf3; }
+    .dropzone { border: 2px dashed #238636; border-radius: 12px; background: #0d1117; padding: 24px 12px; text-align: center; cursor: pointer; position: relative; overflow: hidden; }
+    .dropzone:active { background: #161b22; }
+    .camera-icon { background: #1f3b2b; width: 52px; height: 52px; border-radius: 14px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #3fb950; }
+    .drop-text { font-size: 0.92rem; font-weight: 600; color: #f0f6fc; margin-bottom: 4px; }
+    .drop-sub { font-size: 0.75rem; color: #8b949e; }
+    #previewImg { width: 100%; max-height: 250px; object-fit: contain; border-radius: 8px; display: none; margin-top: 10px; }
+    /* Native file input layered directly on top to ensure mobile tap registers */
+    #nativeFile { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+    .diagnose-btn { display: none; width: 100%; background: #238636; color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 1rem; margin-top: 14px; cursor: pointer; }
+    .samples-header { font-size: 0.75rem; font-weight: 700; color: #8b949e; letter-spacing: 0.5px; margin: 18px 0 10px; text-transform: uppercase; }
+    .samples-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .sample-card { background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 8px; text-align: center; cursor: pointer; transition: 0.2s; }
+    .sample-card:active { border-color: #3fb950; transform: scale(0.98); }
+    .sample-img { width: 100%; height: 60px; border-radius: 6px; object-fit: cover; margin-bottom: 6px; background: #21262d; }
+    .sample-title { font-size: 0.75rem; font-weight: 600; line-height: 1.2; margin-bottom: 3px; }
+    .sample-tag { font-size: 0.65rem; color: #f85149; font-weight: 600; }
+    .sample-tag.healthy { color: #3fb950; }
+    .result-box { display: none; background: #0d1117; border: 1px solid #238636; border-radius: 12px; padding: 14px; margin-top: 14px; text-align: left; }
+    .res-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .badge { background: #3fb950; color: #0d1117; font-weight: 700; font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; }
+    .remedy { background: #161b22; border-left: 3px solid #3fb950; padding: 10px; border-radius: 6px; margin-top: 10px; font-size: 0.8rem; line-height: 1.4; color: #c9d1d9; }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-500 selection:text-white min-h-screen flex flex-col font-sans">
-
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-nav border-b border-brand-100 shadow-sm transition-all duration-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <!-- Logo -->
-      <a href="#" class="flex items-center gap-3 group">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-700 to-brand-500 flex items-center justify-center text-white shadow-md shadow-brand-500/25 group-hover:scale-105 transition-transform">
-          <i class="fa-solid fa-seedling text-2xl"></i>
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="text-2xl font-extrabold tracking-tight text-slate-900 group-hover:text-brand-700 transition-colors">AgriLens</span>
-            <span class="bg-brand-100 text-brand-800 text-xs font-bold px-2 py-0.5 rounded-full border border-brand-200">AI</span>
-          </div>
-          <p class="text-xs font-medium text-slate-500 flex items-center gap-1">
-            <span>किसान दृष्टि</span>
-            <span class="inline-block w-1 h-1 rounded-full bg-slate-300"></span>
-            <span>Edge Diagnostics</span>
-          </p>
-        </div>
-      </a>
-
-      <!-- Navigation Links & Language Switcher -->
-      <div class="flex items-center gap-4 sm:gap-6">
-        <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600">
-          <a href="#scanner-section" class="hover:text-brand-700 transition-colors" data-i18n="nav_scan">AI Scanner</a>
-          <a href="#library-section" class="hover:text-brand-700 transition-colors" data-i18n="nav_library">Diseases Library</a>
-          <a href="#edge-section" class="hover:text-brand-700 transition-colors" data-i18n="nav_offline">Offline Mode</a>
-          <a href="#helpline-section" class="hover:text-brand-700 transition-colors" data-i18n="nav_support">Kisan Help</a>
-        </nav>
-
-        <!-- Language Selector -->
-        <div class="relative">
-          <label for="language-select" class="sr-only">Choose Language</label>
-          <div class="flex items-center bg-slate-100 rounded-xl px-3 py-1.5 border border-slate-200 hover:border-brand-400 transition-colors">
-            <i class="fa-solid fa-language text-slate-500 mr-2 text-base"></i>
-            <select id="language-select" class="bg-transparent text-xs sm:text-sm font-bold text-slate-800 focus:outline-none cursor-pointer">
-              <option value="en">English (India)</option>
-              <option value="hi">हिन्दी (Hindi)</option>
-              <option value="kn">ಕನ್ನಡ (Kannada)</option>
-              <option value="te">తెలుగు (Telugu)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Quick Scan Header Button -->
-        <a href="#scanner-section" class="hidden sm:inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 active:scale-95 text-white font-bold text-sm px-4 py-2.5 rounded-xl shadow-md shadow-brand-600/20 transition-all">
-          <i class="fa-solid fa-camera"></i>
-          <span data-i18n="btn_quick_scan">Scan Crop</span>
-        </a>
+<body>
+  <div class="container">
+    <div class="navbar">
+      <div class="brand">
+        <div class="logo-badge">🌿</div>
+        <div>AgriLens <span style="font-size:0.7rem; background:#1f3b2b; color:#3fb950; padding:2px 6px; border-radius:4px;">AI</span></div>
       </div>
+      <div class="lang-pill">🌐 English (India)</div>
     </div>
-  </header>
 
-  <section class="relative overflow-hidden bg-gradient-to-b from-brand-50/60 via-white to-slate-50 py-16 sm:py-24 border-b border-brand-100/60">
-    <div class="absolute -top-32 -left-32 w-96 h-96 bg-brand-200/40 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute top-20 right-0 w-80 h-80 bg-emerald-200/30 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="terminal-tag">LIVE DIAGNOSIS TERMINAL</div>
+    <h1>AI Leaf Scanner &amp; Pathology Engine</h1>
+    <p class="subtitle">Upload an image from your device or test with our pre-loaded real farm samples.</p>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <!-- Hero Copy -->
-        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-100/90 border border-brand-200 text-brand-900 text-xs sm:text-sm font-bold shadow-sm">
-            <span class="flex h-2 w-2 rounded-full bg-brand-600 animate-ping"></span>
-            <span data-i18n="badge_offline">Works 100% Offline with On-Device TFLite</span>
-          </div>
-
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            <span data-i18n="hero_title_1">Detect Plant Diseases in Seconds with</span>
-            <span class="block bg-gradient-to-r from-brand-700 via-brand-600 to-emerald-600 bg-clip-text text-transparent" data-i18n="hero_title_2">Pocket AI Vision.</span>
-          </h1>
-
-          <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed" data-i18n="hero_desc">
-            Protect your yield from catastrophic fungal and bacterial blights. Capture a leaf photo on any budget smartphone and get verified scientific treatments, chemical spray dosages, and regional audio advice.
-          </p>
-
-          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-            <a href="#scanner-section" class="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-brand-600 hover:bg-brand-700 active:scale-95 text-white font-extrabold text-base rounded-2xl shadow-lg shadow-brand-600/30 hover:shadow-brand-600/40 transition-all">
-              <i class="fa-solid fa-qrcode text-lg"></i>
-              <span data-i18n="btn_hero_scan">Open Leaf Scanner</span>
-            </a>
-            <a href="#library-section" class="w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-4 bg-white hover:bg-slate-100 text-slate-700 font-bold text-base rounded-2xl border border-slate-300 shadow-sm transition-all">
-              <i class="fa-solid fa-book-open text-brand-700"></i>
-              <span data-i18n="btn_hero_library">Explore Crop Diseases</span>
-            </a>
-          </div>
-
-          <!-- Proof points -->
-          <div class="pt-6 grid grid-cols-3 gap-4 border-t border-slate-200/80 max-w-lg mx-auto lg:mx-0 text-left">
-            <div>
-              <p class="text-2xl font-black text-brand-800">96.4%</p>
-              <p class="text-xs text-slate-500 font-medium" data-i18n="stat_acc">Lab Validation</p>
-            </div>
-            <div>
-              <p class="text-2xl font-black text-brand-800">&lt; 150ms</p>
-              <p class="text-xs text-slate-500 font-medium" data-i18n="stat_speed">Edge Latency</p>
-            </div>
-            <div>
-              <p class="text-2xl font-black text-brand-800">₹0 Free</p>
-              <p class="text-xs text-slate-500 font-medium" data-i18n="stat_cost">For All Farmers</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Hero Leaf Visual Card -->
-        <div class="lg:col-span-5 flex justify-center">
-          <div class="relative w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-slate-200">
-            <div class="relative h-72 rounded-2xl overflow-hidden bg-slate-900 group">
-              <img id="hero-img-preview" src="https://images.unsplash.com/photo-1592417817098-8f3d6910985c?auto=format&fit=crop&w=700&q=80" alt="Tomato Leaf with blight spots" class="w-full h-full object-cover">
-              <div class="scan-line"></div>
-              
-              <!-- Simulated Bounding Box -->
-              <div class="absolute top-16 left-12 w-32 h-28 border-2 border-dashed border-red-500 rounded-xl bg-red-500/10 flex items-start p-1.5">
-                <span class="bg-red-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded shadow">Early Blight (98%)</span>
-              </div>
-
-              <div class="absolute bottom-3 left-3 right-3 bg-slate-900/80 backdrop-blur-md rounded-xl p-3 text-white flex items-center justify-between border border-white/10">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-8 h-8 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center font-bold">
-                    <i class="fa-solid fa-triangle-exclamation text-sm"></i>
-                  </div>
-                  <div>
-                    <p class="text-xs font-bold leading-none">Tomato Target Spots</p>
-                    <p class="text-[10px] text-slate-300">Alternaria solani pathogen</p>
-                  </div>
-                </div>
-                <span class="text-xs font-black text-emerald-400 bg-emerald-950/80 px-2 py-1 rounded-md border border-emerald-500/30">Detected</span>
-              </div>
-            </div>
-
-            <div class="mt-4 flex items-center justify-between text-xs text-slate-500 font-semibold px-1">
-              <span class="flex items-center gap-1.5 text-brand-700">
-                <i class="fa-solid fa-shield-halved"></i> ICAR &amp; PlantVillage benchmarked
-              </span>
-              <span>Model v2.4</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="scanner-section" class="py-16 sm:py-20 bg-slate-100/80 border-b border-slate-200 scroll-mt-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="scanner-card">
+      <div class="card-title">☁️ Upload Leaf Photograph</div>
       
-      <div class="text-center max-w-3xl mx-auto mb-12">
-        <span class="text-brand-700 font-bold text-xs uppercase tracking-widest bg-brand-100 px-3 py-1 rounded-full border border-brand-200" data-i18n="scanner_tag">Live Diagnosis Terminal</span>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3" data-i18n="scanner_title">AI Leaf Scanner &amp; Pathology Engine</h2>
-        <p class="text-slate-600 mt-2 text-sm sm:text-base" data-i18n="scanner_subtitle">
-          Upload an image from your device or test with our pre-loaded real farm samples.
-        </p>
+      <div class="dropzone" id="dropArea">
+        <!-- Native invisible input covering the whole box -->
+        <input type="file" id="nativeFile" accept="image/*" capture="environment" />
+        <div class="camera-icon">📷</div>
+        <div class="drop-text" id="statusText">Tap to take photo or select picture</div>
+        <div class="drop-sub">Supports JPG, PNG, WEBP (Max 15MB)</div>
+        <img id="previewImg" alt="Selected leaf" />
       </div>
 
-      <!-- Main Scanning Studio Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        <!-- Left Column: Input / Drag-Drop / Presets -->
-        <div class="lg:col-span-6 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 flex flex-col justify-between">
-          <div>
-            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-3">
-              <i class="fa-solid fa-cloud-arrow-up text-brand-600"></i>
-              <span data-i18n="upload_heading">Upload Leaf Photograph</span>
-            </h3>
+      <button id="diagnoseBtn" class="diagnose-btn">Run AI Pathology Diagnosis</button>
 
-            <!-- Dropzone -->
-            <div id="drop-zone" class="relative group cursor-pointer border-2 border-dashed border-slate-300 hover:border-brand-500 rounded-2xl p-6 sm:p-8 bg-slate-50 hover:bg-brand-50/30 transition-all text-center">
-              <input type="file" id="file-input" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
-              
-              <!-- Default Placeholder -->
-              <div id="drop-placeholder" class="space-y-3">
-                <div class="w-16 h-16 mx-auto rounded-2xl bg-brand-100 text-brand-700 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  <i class="fa-solid fa-camera-retro"></i>
-                </div>
-                <div>
-                  <p class="font-bold text-slate-800 text-sm sm:text-base" data-i18n="drop_text">Tap to take photo or drag &amp; drop leaf picture</p>
-                  <p class="text-xs text-slate-400 mt-1">Supports JPG, PNG, WEBP (Max 15MB)</p>
-                </div>
-              </div>
-
-              <!-- Image Active Preview Inside Dropzone -->
-              <div id="drop-active-preview" class="hidden relative rounded-xl overflow-hidden max-h-72 w-full bg-slate-900">
-                <img id="preview-image" src="" alt="Selected leaf" class="w-full h-64 object-contain mx-auto">
-                <button type="button" id="btn-remove-image" class="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-slate-900/80 text-white hover:bg-red-600 flex items-center justify-center text-xs transition-colors">
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
-              </div>
-            </div>
-
-            <!-- Preset Samples Section -->
-            <div class="mt-6">
-              <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3" data-i18n="preset_heading">Or try realistic sample cases:</p>
-              <div class="grid grid-cols-3 gap-3">
-                <!-- Sample 1 -->
-                <button type="button" class="preset-btn text-left p-2.5 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50/40 transition-all group flex flex-col items-center" data-sample="tomato_early_blight">
-                  <div class="w-full h-16 rounded-lg overflow-hidden bg-slate-100 mb-2">
-                    <img src="https://images.unsplash.com/photo-1592417817098-8f3d6910985c?auto=format&fit=crop&w=300&q=80" alt="Tomato Blight" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
-                  </div>
-                  <span class="text-xs font-bold text-slate-800 text-center leading-tight">Tomato Early Blight</span>
-                  <span class="text-[10px] text-red-600 font-semibold mt-0.5">Fungal</span>
-                </button>
-
-                <!-- Sample 2 -->
-                <button type="button" class="preset-btn text-left p-2.5 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50/40 transition-all group flex flex-col items-center" data-sample="potato_late_blight">
-                  <div class="w-full h-16 rounded-lg overflow-hidden bg-slate-100 mb-2">
-                    <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=300&q=80" alt="Potato Blight" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
-                  </div>
-                  <span class="text-xs font-bold text-slate-800 text-center leading-tight">Potato Late Blight</span>
-                  <span class="text-[10px] text-amber-600 font-semibold mt-0.5">High Severity</span>
-                </button>
-
-                <!-- Sample 3 -->
-                <button type="button" class="preset-btn text-left p-2.5 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50/40 transition-all group flex flex-col items-center" data-sample="corn_healthy">
-                  <div class="w-full h-16 rounded-lg overflow-hidden bg-slate-100 mb-2">
-                    <img src="https://images.unsplash.com/photo-1551754655-cd27e38d2076?auto=format&fit=crop&w=300&q=80" alt="Healthy Corn" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
-                  </div>
-                  <span class="text-xs font-bold text-slate-800 text-center leading-tight">Corn Leaf</span>
-                  <span class="text-[10px] text-emerald-600 font-semibold mt-0.5">Healthy</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Action Button -->
-          <div class="mt-8 pt-6 border-t border-slate-100">
-            <button id="btn-analyze" type="button" disabled class="w-full py-4 px-6 rounded-2xl bg-slate-300 text-slate-500 font-extrabold text-base flex items-center justify-center gap-3 cursor-not-allowed transition-all shadow-sm">
-              <i class="fa-solid fa-microscope text-lg"></i>
-              <span id="btn-analyze-text" data-i18n="btn_run_diagnostic">Select or Upload Image to Analyze</span>
-            </button>
-          </div>
+      <div id="resultBox" class="result-box">
+        <div class="res-head">
+          <h3 id="resDisease" style="color:#3fb950;">Early Blight</h3>
+          <span class="badge" id="resConfidence">96.8% Confidence</span>
         </div>
+        <div style="font-size:0.85rem; color:#8b949e; margin-bottom:6px;">Crop: <strong id="resCrop" style="color:#f0f6fc;">Tomato (Solanum lycopersicum)</strong></div>
+        <div class="remedy">
+          <strong style="color:#3fb950;">Recommended Treatment:</strong><br/>
+          • Spray Neem oil (5ml / L of water) early morning.<br/>
+          • Remove bottom infected leaves to stop fungal spore spread.<br/>
+          • Copper oxychloride spray recommended for severe spread.
+        </div>
+      </div>
 
-        <!-- Right Column: Simulated Analysis Progress & Results -->
-        <div class="lg:col-span-6 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 min-h-[580px] flex flex-col">
-          
-          <!-- Empty State (Initial) -->
-          <div id="result-empty-state" class="flex-1 flex flex-col items-center justify-center text-center p-8 text-slate-400">
-            <div class="w-20 h-20 rounded-3xl bg-slate-100 flex items-center justify-center text-3xl mb-4 text-slate-400">
-              <i class="fa-solid fa-dna"></i>
-            </div>
-            <h4 class="text-lg font-bold text-slate-700" data-i18n="empty_title">Pathology Scanner Standby</h4>
-            <p class="text-xs sm:text-sm text-slate-500 max-w-sm mt-1" data-i18n="empty_desc">
-              Choose one of the 3 presets on the left or upload your custom leaf photo to run inference on the edge neural network.
-            </p>
-          </div>
+      <div class="samples-header">Or Try Realistic Sample Cases:</div>
+      <div class="samples-grid">
+        <div class="sample-card" onclick="loadSample('Tomato', 'Early Blight', '97.2%', 'https://images.unsplash.com/photo-1592417817098-8f3d6910985c?w=300')">
+          <img class="sample-img" src="https://images.unsplash.com/photo-1592417817098-8f3d6910985c?w=300" alt="Tomato">
+          <div class="sample-title">Tomato Early Blight</div>
+          <div class="sample-tag">Fungal</div>
+        </div>
+        <div class="sample-card" onclick="loadSample('Potato', 'Late Blight', '94.5%', 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300')">
+          <img class="sample-img" src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300" alt="Potato">
+          <div class="sample-title">Potato Late Blight</div>
+          <div class="sample-tag">High Severity</div>
+        </div>
+        <div class="sample-card" onclick="loadSample('Corn', 'Healthy Plant', '99.1%', 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=300')">
+          <img class="sample-img" src="https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=300" alt="Corn">
+          <div class="sample-title">Corn Leaf</div>
+          <div class="sample-tag healthy">Healthy</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-          <!-- Loading State (Progress Simulation) -->
-          <div id="result-loading-state" class="hidden flex-1 flex-col justify-center py-12 px-4 space-y-6">
-            <div class="text-center space-y-2">
-              <div class="inline-flex p-4 rounded-2xl bg-brand-100 text-brand-700 text-2xl animate-spin">
-                <i class="fa-solid fa-circle-notch"></i>
-              </div>
-              <h4 id="loading-stage-text" class="text-lg font-extrabold text-slate-800">Pre-processing image matrix (224x224 RGB)...</h4>
-              <p class="text-xs text-slate-500">TensorFlow Lite Edge Quantized Model is evaluating leaf morphology</p>
-            </div>
+  <script>
+    const fileInput = document.getElementById('nativeFile');
+    const previewImg = document.getElementById('previewImg');
+    const statusText = document.getElementById('statusText');
+    const diagnoseBtn = document.getElementById('diagnoseBtn');
+    const resultBox = document.getElementById('resultBox');
 
-            <!-- Progress Bar -->
-            <div class="space-y-2 max-w-md mx-auto w-full">
-              <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden border border-slate-200">
-                <div id="loading-bar-fill" class="bg-gradient-to-r from-brand-600 to-emerald-4
+    fileInput.addEventListener('change', function(e) {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          previewImg.src = evt.target.result;
+          previewImg.style.display = 'block';
+          statusText.innerText = "Photo selected: " + file.name.substring(0, 20);
+          diagnoseBtn.style.display = 'block';
+          resultBox.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    diagnoseBtn.addEventListener('click', function() {
+      diagnoseBtn.innerText = "Analyzing Pathology with AI...";
+      diagnoseBtn.disabled = true;
+      setTimeout(() => {
+        diagnoseBtn.innerText = "Run AI Pathology Diagnosis";
+        diagnoseBtn.disabled = false;
+        resultBox.style.display = 'block';
+        resultBox.scrollIntoView({ behavior: 'smooth' });
+      }, 1000);
+    });
+
+    function loadSample(crop, disease, conf, imgUrl) {
+      previewImg.src = imgUrl;
+      previewImg.style.display = 'block';
+      statusText.innerText = "Loaded: " + crop + " Sample";
+      diagnoseBtn.style.display = 'block';
+      document.getElementById('resCrop').innerText = crop;
+      document.getElementById('resDisease').innerText = disease;
+      document.getElementById('resConfidence').innerText = conf + " Confidence";
+      resultBox.style.display = 'block';
+      resultBox.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
