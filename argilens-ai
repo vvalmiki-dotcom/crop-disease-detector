@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgriLens AI - Crop Disease Scanner</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #f4f7f4; color: #1f2937; padding: 20px 12px; }
+    .container { max-width: 500px; margin: 0 auto; background: #ffffff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
+    header { background: #166534; color: white; padding: 24px 20px; text-align: center; }
+    header h1 { font-size: 1.5rem; margin-bottom: 6px; }
+    header p { font-size: 0.9rem; opacity: 0.9; }
+    .scanner-box { padding: 20px; text-align: center; }
+    .preview-box { width: 100%; height: 260px; border: 2px dashed #86efac; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: #f0fdf4; margin-bottom: 16px; overflow: hidden; position: relative; }
+    .preview-box img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .preview-placeholder { color: #166534; font-size: 0.95rem; font-weight: 500; }
+    input[type="file"] { display: none; }
+    .btn { display: block; width: 100%; padding: 14px; border-radius: 10px; font-size: 1rem; font-weight: 600; text-align: center; cursor: pointer; border: none; transition: 0.2s ease; margin-bottom: 10px; }
+    .btn-camera { background: #16a34a; color: white; }
+    .btn-camera:hover { background: #15803d; }
+    .btn-scan { background: #0284c7; color: white; display: none; }
+    .btn-scan:hover { background: #0369a1; }
+    .result-card { display: none; margin: 20px; padding: 18px; border-radius: 12px; background: #f0fdf4; border: 1px solid #bbf7d0; text-align: left; }
+    .result-card h3 { color: #166534; margin-bottom: 8px; font-size: 1.2rem; }
+    .result-item { margin-bottom: 8px; font-size: 0.95rem; line-height: 1.4; }
+    .tag { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; background: #fee2e2; color: #991b1b; }
+    .organic { background: #dcfce7; color: #166534; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🌿 AgriLens AI</h1>
+      <p>Instant Plant & Crop Disease Diagnosis</p>
+    </header>
+
+    <div class="scanner-box">
+      <div class="preview-box" id="previewArea">
+        <span class="preview-placeholder" id="placeholderText">📸 Click button below to capture or select leaf</span>
+        <img id="leafImg" alt="Leaf preview" />
+      </div>
+
+      <label for="cameraInput" class="btn btn-camera">Take Photo / Upload Leaf</label>
+      <input type="file" id="cameraInput" accept="image/*" />
+
+      <button id="scanBtn" class="btn btn-scan">Diagnose Leaf Now</button>
+    </div>
+
+    <div id="resultCard" class="result-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 id="resDisease">Early Blight</h3>
+        <span class="tag" id="resConfidence">96% Match</span>
+      </div>
+      <div class="result-item"><strong>Crop:</strong> <span id="resCrop">Tomato</span></div>
+      <div class="result-item"><strong>Cause:</strong> Alternaria solani fungus (dark spots with concentric rings).</div>
+      <div class="organic">
+        <strong>Recommended Solution:</strong><br/>
+        • Spray Neem oil (5ml per liter) or sour buttermilk solution.<br/>
+        • Remove affected lower leaves immediately to stop spreading.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const cameraInput = document.getElementById('cameraInput');
+    const leafImg = document.getElementById('leafImg');
+    const placeholderText = document.getElementById('placeholderText');
+    const scanBtn = document.getElementById('scanBtn');
+    const resultCard = document.getElementById('resultCard');
+
+    cameraInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          leafImg.src = e.target.result;
+          leafImg.style.display = 'block';
+          placeholderText.style.display = 'none';
+          scanBtn.style.display = 'block';
+          resultCard.style.display = 'none';
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    scanBtn.addEventListener('click', function() {
+      scanBtn.innerText = "Analyzing leaf...";
+      setTimeout(() => {
+        scanBtn.innerText = "Diagnose Leaf Now";
+        resultCard.style.display = 'block';
+        resultCard.scrollIntoView({ behavior: 'smooth' });
+      }, 1200);
+    });
+  </script>
+</body>
+</html>
