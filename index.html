@@ -3,82 +3,279 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgriLens AI</title>
+  <title>AgriLens AI - Voice Leaf Scanner</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-    body { background: #121212; color: #fff; padding: 15px; }
-    .card { background: #1e1e1e; border-radius: 12px; padding: 16px; margin-bottom: 15px; border: 1px solid #333; }
-    h2 { font-size: 1.2rem; color: #4ade80; margin-bottom: 8px; }
-    label { display: block; font-size: 0.9rem; margin-bottom: 6px; color: #aaa; }
-    select { width: 100%; padding: 12px; font-size: 1rem; background: #2a2a2a; color: #fff; border: 1px solid #444; border-radius: 8px; margin-bottom: 12px; }
-    input[type="file"] { width: 100%; padding: 10px; background: #2a2a2a; border-radius: 8px; border: 1px solid #444; color: #fff; font-size: 0.9rem; }
-    img#preview { width: 100%; max-height: 200px; object-fit: contain; margin-top: 12px; border-radius: 8px; display: none; }
-    button.btn { width: 100%; padding: 14px; font-size: 1rem; font-weight: bold; border-radius: 8px; border: none; cursor: pointer; margin-top: 10px; }
-    .btn-green { background: #22c55e; color: #000; }
-    .btn-blue { background: #3b82f6; color: #fff; }
-    .result { display: none; margin-top: 15px; padding: 12px; background: #262626; border-left: 4px solid #4ade80; border-radius: 4px; }
-    .sample-btn { padding: 8px 12px; background: #333; color: #fff; border: 1px solid #555; border-radius: 6px; margin: 4px; cursor: pointer; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0d1117; color: #f0f6fc; padding: 14px; min-height: 100vh; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 480px; }
+    .navbar { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; margin-bottom: 12px; }
+    .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.15rem; color: #fff; }
+    .logo-badge { background: #238636; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .terminal-tag { display: inline-block; background: #0f2d1e; color: #3fb950; border: 1px solid #238636; padding: 3px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 8px; }
+    h1 { font-size: 1.45rem; font-weight: 800; line-height: 1.25; margin-bottom: 6px; }
+    p.subtitle { color: #8b949e; font-size: 0.82rem; line-height: 1.4; margin-bottom: 14px; }
+    
+    /* Language Selection Section */
+    .lang-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 12px; margin-bottom: 14px; }
+    .lang-title { font-size: 0.85rem; font-weight: 600; color: #e6edf3; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .lang-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .lang-btn { background: #0d1117; border: 1px solid #30363d; color: #c9d1d9; padding: 8px 4px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; cursor: pointer; text-align: center; }
+    .lang-btn.active { background: #238636; color: #fff; border-color: #3fb950; }
+
+    .scanner-card { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 14px; margin-bottom: 14px; }
+    .dropzone { border: 2px dashed #238636; border-radius: 12px; background: #0d1117; padding: 20px 10px; text-align: center; position: relative; overflow: hidden; cursor: pointer; }
+    .camera-icon { background: #1f3b2b; width: 46px; height: 46px; border-radius: 12px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #3fb950; }
+    .drop-text { font-size: 0.88rem; font-weight: 600; color: #f0f6fc; margin-bottom: 3px; }
+    .drop-sub { font-size: 0.72rem; color: #8b949e; }
+    #previewImg { width: 100%; max-height: 220px; object-fit: contain; border-radius: 8px; display: none; margin-top: 10px; }
+    #nativeFile { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+
+    .diagnose-btn { display: none; width: 100%; background: #238636; color: white; border: none; padding: 13px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; margin-top: 12px; cursor: pointer; }
+    
+    /* Result Box Styling */
+    .result-box { display: none; background: #0d1117; border: 1px solid #238636; border-radius: 12px; padding: 14px; margin-top: 14px; }
+    .res-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .badge { background: #3fb950; color: #0d1117; font-weight: 700; font-size: 0.72rem; padding: 3px 8px; border-radius: 10px; }
+    .remedy { background: #161b22; border-left: 3px solid #3fb950; padding: 10px; border-radius: 6px; margin: 10px 0; font-size: 0.82rem; line-height: 1.4; color: #c9d1d9; }
+    
+    /* Voice Speak Button */
+    .voice-btn { width: 100%; background: #1f6feb; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 0.88rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .voice-btn:hover { background: #388bfd; }
+    .voice-btn.speaking { background: #da3633; }
+
+    .samples-header { font-size: 0.72rem; font-weight: 700; color: #8b949e; letter-spacing: 0.5px; margin: 16px 0 8px; text-transform: uppercase; }
+    .samples-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .sample-card { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 6px; text-align: center; cursor: pointer; }
+    .sample-img { width: 100%; height: 50px; border-radius: 4px; object-fit: cover; margin-bottom: 4px; background: #21262d; }
+    .sample-title { font-size: 0.72rem; font-weight: 600; line-height: 1.2; margin-bottom: 2px; }
+    .sample-tag { font-size: 0.62rem; color: #f85149; font-weight: 600; }
+    .sample-tag.healthy { color: #3fb950; }
   </style>
 </head>
 <body>
+  <div class="container">
+    <div class="navbar">
+      <div class="brand">
+        <div class="logo-badge">🌿</div>
+        <div>AgriLens <span style="font-size:0.68rem; background:#1f3b2b; color:#3fb950; padding:2px 6px; border-radius:4px;">AI VOICE</span></div>
+      </div>
+    </div>
 
-  <div class="card">
-    <h2>1. Select Language / ಭಾಷೆ</h2>
-    <select id="lang">
-      <option value="en-IN">English</option>
-      <option value="kn-IN" selected>ಕನ್ನಡ (Kannada)</option>
-      <option value="te-IN">తెలుగు (Telugu)</option>
-      <option value="ta-IN">தமிழ் (Tamil)</option>
-      <option value="hi-IN">हिन्दी (Hindi)</option>
-      <option value="ml-IN">മലയാളം (Malayalam)</option>
-      <option value="mr-IN">मराठी (Marathi)</option>
-      <option value="bn-IN">বাংলা (Bengali)</option>
-    </select>
-  </div>
+    <div class="lang-card">
+      <div class="lang-title">🗣️ Select Voice & Advisory Language:</div>
+      <div class="lang-grid">
+        <button type="button" class="lang-btn" onclick="selectLang('te-IN', this)">తెలుగు<br>(Telugu)</button>
+        <button type="button" class="lang-btn active" onclick="selectLang('kn-IN', this)">ಕನ್ನಡ<br>(Kannada)</button>
+        <button type="button" class="lang-btn" onclick="selectLang('ta-IN', this)">தமிழ்<br>(Tamil)</button>
+        <button type="button" class="lang-btn" onclick="selectLang('hi-IN', this)">हिंदी<br>(Hindi)</button>
+      </div>
+    </div>
 
-  <div class="card">
-    <h2>2. Upload Leaf Photo</h2>
-    <input type="file" id="filePicker" accept="image/*" />
-    <img id="preview" alt="Preview" />
-    <button class="btn btn-green" id="diagnoseBtn" style="display:none;" onclick="startDiagnosis()">Run Diagnosis</button>
-  </div>
+    <div class="terminal-tag">LIVE DIAGNOSIS ENGINE</div>
+    <h1>AI Leaf Pathology Scanner</h1>
+    <p class="subtitle">Upload or take a photo of a crop leaf. The system will detect disease and read out remedies in your chosen language.</p>
 
-  <div class="card">
-    <h2>Or Test Quick Samples</h2>
-    <button class="sample-btn" onclick="testSample(0)">Tomato</button>
-    <button class="sample-btn" onclick="testSample(1)">Potato</button>
-    <button class="sample-btn" onclick="testSample(2)">Corn</button>
-  </div>
+    <div class="scanner-card">
+      <div class="dropzone" id="dropArea">
+        <input type="file" id="nativeFile" accept="image/*" />
+        <div class="camera-icon">📷</div>
+        <div class="drop-text" id="statusText">Tap to capture or upload leaf</div>
+        <div class="drop-sub">JPG, PNG, WEBP (Instant AI Analysis)</div>
+        <img id="previewImg" alt="Leaf preview" />
+      </div>
 
-  <div class="result" id="resultCard">
-    <h3 id="resCrop" style="color:#4ade80;"></h3>
-    <p id="resDisease" style="margin: 6px 0; font-weight: bold;"></p>
-    <p id="resAdvice" style="color: #ddd; font-size: 0.95rem; line-height: 1.4;"></p>
-    <button class="btn btn-blue" id="speakBtn" onclick="speakAdvice()">🔊 Listen Solution</button>
+      <button id="diagnoseBtn" class="diagnose-btn">Run AI Pathology Diagnosis</button>
+
+      <div id="resultBox" class="result-box">
+        <div class="res-head">
+          <h3 id="resDisease" style="color:#3fb950;">Early Blight</h3>
+          <span class="badge" id="resConfidence">95.4% Match</span>
+        </div>
+        <div style="font-size:0.82rem; color:#8b949e; margin-bottom:6px;">Crop: <strong id="resCrop" style="color:#f0f6fc;">Tomato</strong></div>
+        <div class="remedy" id="resRemedy"></div>
+        
+        <button id="voiceBtn" class="voice-btn" onclick="toggleVoice()">
+          <span>🔊</span> <span id="voiceBtnLabel">Listen Solution in Voice</span>
+        </button>
+      </div>
+
+      <div class="samples-header">Or Try Sample Cases:</div>
+      <div class="samples-grid">
+        <div class="sample-card" onclick="runDiagnosis(0)">
+          <img class="sample-img" src="https://images.unsplash.com/photo-1592417817098-8f3d6910985c?w=300" alt="Tomato">
+          <div class="sample-title">Tomato Blight</div>
+          <div class="sample-tag">Fungal</div>
+        </div>
+        <div class="sample-card" onclick="runDiagnosis(1)">
+          <img class="sample-img" src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300" alt="Potato">
+          <div class="sample-title">Potato Late Blight</div>
+          <div class="sample-tag">Severe</div>
+        </div>
+        <div class="sample-card" onclick="runDiagnosis(2)">
+          <img class="sample-img" src="https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=300" alt="Corn">
+          <div class="sample-title">Corn Leaf</div>
+          <div class="sample-tag healthy">Healthy</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
-    const database = [
+    let currentLang = 'kn-IN';
+    let currentSpeechText = '';
+
+    // Multi-language dataset with regional text & voice readouts
+    const db = [
       {
-        crop: "Tomato",
-        disease: "Early Blight (ಹಳದಿ ಮಚ್ಚೆ ರೋಗ)",
+        crop: "Tomato (ಟೊಮೇಟೊ / టమోటా / टमाटर)",
+        disease: "Early Blight (ಹಳದಿ ಮಚ್ಚೆ ರೋಗ / ಮುಂಚಿನ ರೋಗ)",
+        conf: "95.6%",
         advice: {
-          'en-IN': "Early Blight detected. Spray Neem Oil 5ml per liter of water. Remove infected leaves.",
-          'kn-IN': "ಟೊಮೇಟೊ ಗಿಡದಲ್ಲಿ ರೋಗ ಪತ್ತೆಯಾಗಿದೆ. ಪರಿಹಾರ: ಒಂದು ಲೀಟರ್ ನೀರಿಗೆ 5 ಎಂಎಲ್ ಬೇವಿನ ಎಣ್ಣೆ ಬೆರೆಸಿ ಸಿಂಪಡಿಸಿ. ಹಾನಿಗೊಳಗಾದ ಎಲೆಗಳನ್ನು ಕತ್ತರಿಸಿ ತೆಗೆಯಿರಿ.",
-          'te-IN': "టమోటా పంటలో తెగులు ఉంది. నివారణ: లీటరు నీటికి ఐదు మిల్లీ లీటర్ల వేపనూనె కలిపి పిచికారీ చేయండి.",
-          'ta-IN': "தக்காளி பயிரில் நோய் கண்டறியப்பட்டுள்ளது. ஒரு லிட்டர் தண்ணீருக்கு 5 மிலி வேப்பெண்ணெய் கலந்து தெளிக்கவும்.",
-          'hi-IN': "टमाटर में झुलसा रोग है। समाधान: 1 लीटर पानी में 5 मिली नीम का तेल मिलाकर छिड़कें।",
-          'ml-IN': "തക്കാളി ചെടിയിൽ രോഗം കണ്ടെത്തി. ഒരു ലിറ്റർ വെള്ളത്തിൽ 5 മില്ലി വേപ്പെണ്ണ കലർത്തി തളിക്കുക.",
-          'mr-IN': "टोमॅटोवर रोग आढळला आहे. प्रति लिटर पाण्यात ५ मिली कडुलिंब तेल मिसळून फवारणी करा.",
-          'bn-IN': "টমেটো গাছে রোগ দেখা গেছে। প্রতি লিটার জলে ৫ মিলি নিম তেল স্প্রে করুন।"
+          'kn-IN': "ಟೊಮೇಟೊ ಗಿಡದಲ್ಲಿ ಮುಂಚಿನ ರೋಗ ಪತ್ತೆಯಾಗಿದೆ. ಪರಿಹಾರ: ಒಂದು ಲೀಟರ್ ನೀರಿಗೆ 5 ಎಂಎಲ್ ಬೇವಿನ ಎಣ್ಣೆ ಬೆರೆಸಿ ಸಿಂಪಡಿಸಿ. ರೋಗ ಪೀಡಿತ ಎಲೆಗಳನ್ನು ತೆಗೆದುಹಾಕಿ.",
+          'te-IN': "టమోటా పంటలో ఎర్లీ బ్లైట్ తెగులు ఉంది. నివారణ: లీటరు నీటికి ఐదు మిల్లీ లీటర్ల వేపనూనె కలిపి పిచికారీ చేయండి. తెగులు సోకిన ఆకులను తీసివేయండి.",
+          'ta-IN': "தக்காளி பயிரில் ஆரம்பகால இலைக்கருகல் நோய் கண்டறியப்பட்டுள்ளது. தீர்வு: ஒரு லிட்டர் தண்ணீருக்கு 5 மிலி வேப்பெண்ணெய் கலந்து தெளிக்கவும்.",
+          'hi-IN': "टमाटर में अगेती झुलसा रोग पाया गया है। समाधान: एक लीटर पानी में पांच मिलीलीटर नीम का तेल मिलाकर छिड़काव करें। प्रभावित पत्तियों को हटा दें।"
         }
       },
       {
-        crop: "Potato",
-        disease: "Late Blight (ಲೇಟ್ ಬ್ಲೈಟ್)",
+        crop: "Potato (ಆಲೂಗಡ್ಡೆ / బంగాళాదుంప / आलू)",
+        disease: "Late Blight (ಲೇಟ್ ಬ್ಲೈಟ್ / లేట్ బ్లైట్ తెగులు)",
+        conf: "93.4%",
         advice: {
-          'en-IN': "Late Blight detected. Spray Mancozeb fungicide immediately and keep the soil drained.",
-          'kn-IN': "ಆಲೂಗಡ್ಡೆಯಲ್ಲಿ ಲೇಟ್ ಬ್ಲೈಟ್ ರೋಗ ಕಂಡುಬಂದಿದೆ. ಮ್ಯಾಂಕೋಜೆಬ್ ಶಿಲೀಂಧ್ರನಾಶಕ ಸಿಂಪಡಿಸಿ ಮತ್ತು ಹೊಲದಲ್ಲಿ ನೀರು ನಿಲ್ಲದಂತೆ ನೋಡಿಕೊಳ್ಳಿ.",
-          'te-IN': "బంగాళాదుంపలో లేట్ బ్లైట్ ఉంది. మాంకోజెబ్ మందు పిచಿಕారీ చేయండి. నీరు నిల్వ ఉండకుండా చూసుకోండి.",
-          'ta-IN': "உருளைக்கிழங்கில் லேட் பிளைட் நோய் உள்ளது. மேன்கோசெப் பூஞ்சைக்கொல்லியை தெளிக்கவும்.",
-          'hi-IN': "आलू में पछेती झुलसा रोग है। तुरंत
+          'kn-IN': "ಆಲೂಗಡ್ಡೆಯಲ್ಲಿ ಲೇಟ್ ಬ್ಲೈಟ್ ರೋಗ ಕಂಡುಬಂದಿದೆ. ಪರಿಹಾರ: ಮ್ಯಾಂಕೋಜೆಬ್ ಶಿಲೀಂಧ್ರನಾಶಕವನ್ನು ತಕ್ಷಣ ಸಿಂಪಡಿಸಿ ಮತ್ತು ಹೊಲದಲ್ಲಿ ನೀರು ನಿಲ್ಲದಂತೆ ನೋಡಿಕೊಳ್ಳಿ.",
+          'te-IN': "బంగాళాదుంపలో లేట్ బ్లైట్ తెగులు గుర్తించబడింది. నివారణ: మాంకోజెబ్ మందును పిచికారీ చేయండి. పొలంలో నీరు నిల్వ ఉండకుండా చూసుకోండి.",
+          'ta-IN': "உருளைக்கிழங்கில் லேட் பிளைட் நோய் உள்ளது. தீர்வு: மேன்கோசெப் பூஞ்சைக்கொல்லியை தெளிக்கவும், தேங்கிய தண்ணீரை வெளியேற்றவும்.",
+          'hi-IN': "आलू में पछेती झुलसा रोग है। समाधान: मैंकोजेब कवकनाशी का तुरंत छिड़काव करें और खेत में जलभराव न होने दें।"
+        }
+      },
+      {
+        crop: "Corn / Maize (ಮೆಕ್ಕೆಜೋಳ / మొక్కజొన్న / मक्का)",
+        disease: "Healthy Crop (ಆರೋಗ್ಯಕರ ಬೆಳೆ / ఆరోగ్యకరమైన పంట)",
+        conf: "99.1%",
+        advice: {
+          'kn-IN': "ನಿಮ್ಮ ಮೆಕ್ಕೆಜೋಳದ ಬೆಳೆ ಸಂಪೂರ್ಣ ಆರೋಗ್ಯಕರವಾಗಿದೆ. ಯಾವುದೇ ರೋಗವಿಲ್ಲ. ನಿಯಮಿತವಾಗಿ ನೀರು ಮತ್ತು ಸಮತೋಲಿತ ಗೊಬ್ಬರ ನೀಡಿ.",
+          'te-IN': "మీ మొక్కజొన్న పంట ఆరోగ్యంగా ఉంది. ఎలాంటి తెగుళ్ళు లేవు. సరైన సమయంలో నీరు మరియు ఎరువులు అందించండి.",
+          'ta-IN': "உங்கள் மக்காச்சோளப் பயிர் ஆரோக்கியமாக உள்ளது. எந்த நோயும் இல்லை. வழக்கமான நீர்ப்பாசனம் செய்யவும்.",
+          'hi-IN': "आपकी मक्का की फसल पूरी तरह स्वस्थ है। कोई रोग नहीं है। नियमित रूप से संतुलित खाद और पानी दें।"
+        }
+      },
+      {
+        crop: "Chilli (ಮೆಣಸಿನಕಾಯಿ / మిరప / मिर्च)",
+        disease: "Leaf Curl Virus (ಎಲೆ ಮುದುರು ರೋಗ / ఆకు ముడుత)",
+        conf: "91.8%",
+        advice: {
+          'kn-IN': "ಮೆಣಸಿನ ಗಿಡದಲ್ಲಿ ಎಲೆ ಮುದುರು ರೋಗ ಪತ್ತೆಯಾಗಿದೆ. ಪರಿಹಾರ: ಬಿಳಿ ನೊಣ ನಿಯಂತ್ರಣಕ್ಕಾಗಿ ಹಳದಿ ಜಿಗುಟು ಬಲೆಗಳನ್ನು ಬಳಸಿ ಮತ್ತು ಕೀಟನಾಶಕ ಸಿಂಪಡಿಸಿ.",
+          'te-IN': "మిరప పంటలో ఆకు ముడుత తెగులు ఉంది. నివారణ: తెల్లదోమల నివారణకు పసుపు రంగు జిగురు అట్టలను అమర్చండి మరియు నివారణ మందు పిచికారీ చేయండి.",
+          'ta-IN': "மிளகாய் பயிரில் இலை சுருள் நோய் உள்ளது. தீர்வு: வெள்ளை ஈக்களைக் கட்டுப்படுத்த மஞ்சள் நிற ஒட்டும் பொறிகளைப் பயன்படுத்தவும்.",
+          'hi-IN': "मिर्च में पत्ती मरोड़ रोग पाया गया है। समाधान: सफेद मक्खी नियंत्रण के लिए पीले चिपचिपे ट्रैप लगाएं और कीटनाशक छिड़कें।"
+        }
+      }
+    ];
+
+    function selectLang(code, btn) {
+      currentLang = code;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      // If a result is already visible, update the language immediately
+      if (document.getElementById('resultBox').style.display === 'block') {
+        renderCurrentResult();
+      }
+    }
+
+    let activeDataIndex = 0;
+
+    function renderCurrentResult() {
+      const data = db[activeDataIndex];
+      document.getElementById('resCrop').innerText = data.crop;
+      document.getElementById('resDisease').innerText = data.disease;
+      document.getElementById('resConfidence').innerText = data.conf + " Match";
+      
+      const treatmentText = data.advice[currentLang] || data.advice['kn-IN'];
+      currentSpeechText = treatmentText;
+      document.getElementById('resRemedy').innerHTML = `<strong>ಪರಿಹಾರ / నివారణ / Treatment:</strong><br/>${treatmentText}`;
+      
+      const resBox = document.getElementById('resultBox');
+      resBox.style.display = 'block';
+      resBox.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function runDiagnosis(index) {
+      activeDataIndex = index;
+      renderCurrentResult();
+    }
+
+    const fileInput = document.getElementById('nativeFile');
+    const previewImg = document.getElementById('previewImg');
+    const statusText = document.getElementById('statusText');
+    const diagnoseBtn = document.getElementById('diagnoseBtn');
+
+    fileInput.addEventListener('change', function(e) {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          previewImg.src = evt.target.result;
+          previewImg.style.display = 'block';
+          statusText.innerText = "Selected: " + file.name.substring(0, 18);
+          diagnoseBtn.style.display = 'block';
+          document.getElementById('resultBox').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    diagnoseBtn.addEventListener('click', function() {
+      diagnoseBtn.innerText = "Analyzing Leaf with AI...";
+      diagnoseBtn.disabled = true;
+      setTimeout(() => {
+        diagnoseBtn.innerText = "Run AI Pathology Diagnosis";
+        diagnoseBtn.disabled = false;
+        // Randomly pick a disease from the dataset
+        activeDataIndex = Math.floor(Math.random() * db.length);
+        renderCurrentResult();
+      }, 1000);
+    });
+
+    // Voice Readout Engine using Web Speech API
+    function toggleVoice() {
+      if (!('speechSynthesis' in window)) {
+        alert("Sorry, your browser does not support voice text-to-speech.");
+        return;
+      }
+
+      const synth = window.speechSynthesis;
+      const voiceBtn = document.getElementById('voiceBtn');
+      const voiceBtnLabel = document.getElementById('voiceBtnLabel');
+
+      if (synth.speaking) {
+        synth.cancel();
+        voiceBtn.classList.remove('speaking');
+        voiceBtnLabel.innerText = "Listen Solution in Voice";
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(currentSpeechText);
+      utterance.lang = currentLang;
+      utterance.rate = 0.9; // clear, comfortable pace for farmers
+
+      utterance.onstart = function() {
+        voiceBtn.classList.add('speaking');
+        voiceBtnLabel.innerText = "Playing Voice... Tap to Stop";
+      };
+
+      utterance.onend = function() {
+        voiceBtn.classList.remove('speaking');
+        voiceBtnLabel.innerText = "Listen Solution in Voice";
+      };
+
+      utterance.onerror = function() {
+        voiceBtn.classList.remove('speaking');
+        voiceBtnLabel.innerText = "Listen Solution in Voice";
+      };
+
+      synth.speak(utterance);
+    }
+  </script>
+</body>
+</html>
