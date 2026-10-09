@@ -15,22 +15,25 @@
     h1 { font-size: 1.45rem; font-weight: 800; line-height: 1.25; margin-bottom: 6px; }
     p.subtitle { color: #8b949e; font-size: 0.82rem; line-height: 1.4; margin-bottom: 14px; }
     
-    /* Prominent Language Selector Step 1 */
-    .lang-card { background: #161b22; border: 2px solid #238636; border-radius: 12px; padding: 14px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(35, 134, 54, 0.15); }
-    .lang-title { font-size: 0.9rem; font-weight: 700; color: #3fb950; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+    .lang-card { background: #161b22; border: 2px solid #238636; border-radius: 12px; padding: 14px; margin-bottom: 16px; }
+    .lang-title { font-size: 0.9rem; font-weight: 700; color: #3fb950; margin-bottom: 4px; }
     .lang-subtitle { font-size: 0.75rem; color: #8b949e; margin-bottom: 10px; }
     .lang-select-box { width: 100%; padding: 12px; border-radius: 8px; background: #0d1117; border: 1px solid #30363d; color: #f0f6fc; font-size: 0.95rem; font-weight: 600; outline: none; cursor: pointer; }
     .lang-select-box:focus { border-color: #3fb950; }
 
     .scanner-card { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 14px; margin-bottom: 14px; }
-    .dropzone { border: 2px dashed #238636; border-radius: 12px; background: #0d1117; padding: 20px 10px; text-align: center; position: relative; overflow: hidden; cursor: pointer; }
-    .camera-icon { background: #1f3b2b; width: 46px; height: 46px; border-radius: 12px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #3fb950; }
-    .drop-text { font-size: 0.88rem; font-weight: 600; color: #f0f6fc; margin-bottom: 3px; }
-    .drop-sub { font-size: 0.72rem; color: #8b949e; }
-    #previewImg { width: 100%; max-height: 220px; object-fit: contain; border-radius: 8px; display: none; margin-top: 10px; }
-    #nativeFile { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+    
+    .upload-btn-container { margin-bottom: 12px; }
+    .file-input { display: none; }
+    .custom-upload-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed #238636; border-radius: 12px; background: #0d1117; padding: 22px 12px; cursor: pointer; text-align: center; }
+    .custom-upload-btn:active { background: #161b22; }
+    .camera-icon { background: #1f3b2b; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #3fb950; margin-bottom: 8px; }
+    .drop-text { font-size: 0.9rem; font-weight: 600; color: #f0f6fc; margin-bottom: 4px; }
+    .drop-sub { font-size: 0.75rem; color: #8b949e; }
+    
+    #previewImg { width: 100%; max-height: 220px; object-fit: contain; border-radius: 8px; display: none; margin-top: 12px; }
 
-    .diagnose-btn { display: none; width: 100%; background: #238636; color: white; border: none; padding: 13px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; margin-top: 12px; cursor: pointer; }
+    .diagnose-btn { display: none; width: 100%; background: #238636; color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; margin-top: 12px; cursor: pointer; }
     
     .result-box { display: none; background: #0d1117; border: 1px solid #238636; border-radius: 12px; padding: 14px; margin-top: 14px; }
     .res-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
@@ -55,160 +58,13 @@
     <div class="navbar">
       <div class="brand">
         <div class="logo-badge">🌿</div>
-        <div>AgriLens <span style="font-size:0.68rem; background:#1f3b2b; color:#3fb950; padding:2px 6px; border-radius:4px;">MULTI-VOICE</span></div>
+        <div>AgriLens <span style="font-size:0.68rem; background:#1f3b2b; color:#3fb950; padding:2px 6px; border-radius:4px;">AI VOICE</span></div>
       </div>
     </div>
 
     <div class="lang-card">
-      <div class="lang-title">🌐 Step 1: Choose Your Language / ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</div>
+      <div class="lang-title">🌐 Step 1: Choose Language / ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</div>
       <div class="lang-subtitle">Select language for speech synthesis and advisory remedies:</div>
       <select id="languageSelect" class="lang-select-box" onchange="changeLanguage(this.value)">
         <option value="en-IN" selected>English (India)</option>
-        <option value="kn-IN">ಕನ್ನಡ (Kannada)</option>
-        <option value="te-IN">తెలుగు (Telugu)</option>
-        <option value="ta-IN">தமிழ் (Tamil)</option>
-        <option value="hi-IN">हिन्दी (Hindi)</option>
-        <option value="ml-IN">മലയാളം (Malayalam)</option>
-        <option value="mr-IN">मराठी (Marathi)</option>
-        <option value="bn-IN">বাংলা (Bengali)</option>
-        <option value="gu-IN">ગુજરાતી (Gujarati)</option>
-        <option value="pa-IN">ਪੰਜਾਬੀ (Punjabi)</option>
-        <option value="or-IN">ଓଡ଼ିଆ (Odia)</option>
-        <option value="ur-IN">اردو (Urdu)</option>
-      </select>
-    </div>
-
-    <div class="terminal-tag">LIVE DIAGNOSIS ENGINE</div>
-    <h1>AI Leaf Pathology Scanner</h1>
-    <p class="subtitle">Step 2: Upload or capture a leaf photo to diagnose crop diseases and listen to voice remedies.</p>
-
-    <div class="scanner-card">
-      <div class="dropzone" id="dropArea">
-        <input type="file" id="nativeFile" accept="image/*" />
-        <div class="camera-icon">📷</div>
-        <div class="drop-text" id="statusText">Tap to capture or upload leaf</div>
-        <div class="drop-sub">JPG, PNG, WEBP (Instant AI Analysis)</div>
-        <img id="previewImg" alt="Leaf preview" />
-      </div>
-
-      <button id="diagnoseBtn" class="diagnose-btn">Run AI Pathology Diagnosis</button>
-
-      <div id="resultBox" class="result-box">
-        <div class="res-head">
-          <h3 id="resDisease" style="color:#3fb950;">Early Blight</h3>
-          <span class="badge" id="resConfidence">95.4% Match</span>
-        </div>
-        <div style="font-size:0.82rem; color:#8b949e; margin-bottom:6px;">Crop: <strong id="resCrop" style="color:#f0f6fc;">Tomato</strong></div>
-        <div class="remedy" id="resRemedy"></div>
-        
-        <button id="voiceBtn" class="voice-btn" onclick="toggleVoice()">
-          <span>🔊</span> <span id="voiceBtnLabel">Listen Solution in Voice</span>
-        </button>
-      </div>
-
-      <div class="samples-header">Or Try Sample Cases:</div>
-      <div class="samples-grid">
-        <div class="sample-card" onclick="runDiagnosis(0)">
-          <img class="sample-img" src="https://images.unsplash.com/photo-1592417817098-8f3d6910985c?w=300" alt="Tomato">
-          <div class="sample-title">Tomato Blight</div>
-          <div class="sample-tag">Fungal</div>
-        </div>
-        <div class="sample-card" onclick="runDiagnosis(1)">
-          <img class="sample-img" src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300" alt="Potato">
-          <div class="sample-title">Potato Late Blight</div>
-          <div class="sample-tag">Severe</div>
-        </div>
-        <div class="sample-card" onclick="runDiagnosis(2)">
-          <img class="sample-img" src="https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=300" alt="Corn">
-          <div class="sample-title">Corn Leaf</div>
-          <div class="sample-tag healthy">Healthy</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    let currentLang = 'en-IN';
-    let currentSpeechText = '';
-    let activeDataIndex = 0;
-
-    // Pan-Indian language database covering English & major Indian languages
-    const db = [
-      {
-        crop: "Tomato",
-        disease: "Early Blight",
-        conf: "95.6%",
-        advice: {
-          'en-IN': "Early Blight detected on Tomato foliage. Solution: Spray Organic Neem Oil (5ml per liter of water) during early morning hours. Prune and destroy lower infected leaves immediately.",
-          'kn-IN': "ಟೊಮೇಟೊ ಗಿಡದಲ್ಲಿ ಮುಂಚಿನ ರೋಗ ಪತ್ತೆಯಾಗಿದೆ. ಪರಿಹಾರ: ಒಂದು ಲೀಟರ್ ನೀರಿಗೆ 5 ಎಂಎಲ್ ಬೇವಿನ ಎಣ್ಣೆ ಬೆರೆಸಿ ಸಿಂಪಡಿಸಿ. ರೋಗ ಪೀಡಿತ ಎಲೆಗಳನ್ನು ತೆಗೆದುಹಾಕಿ.",
-          'te-IN': "టమోటా పంటలో ఎర్లీ బ్లైట్ తెగులు ఉంది. నివారణ: లీటరు నీటికి ఐదు మిల్లీ లీటర్ల వేపనూనె కలిపి పిచికారీ చేయండి. తెగులు సోకిన ఆకులను తీసివేయండి.",
-          'ta-IN': "தக்காளி பயிரில் ஆரம்பகால இலைக்கருகல் நோய் கண்டறியப்பட்டுள்ளது. தீர்வு: ஒரு லிட்டர் தண்ணீருக்கு 5 மிலி வேப்பெண்ணெய் கலந்து தெளிக்கவும்.",
-          'hi-IN': "टमाटर में अगेती झुलसा रोग पाया गया है। समाधान: एक लीटर पानी में 5 मिली नीम का तेल मिलाकर छिड़कें। प्रभावित पत्तियों को तुरंत हटा दें।",
-          'ml-IN': "തക്കാളി ചെടിയിൽ ഏർലി ബ്ലൈറ്റ് രോഗം കണ്ടെത്തി. പരിഹാരം: ഒരു ലിറ്റർ വെള്ളത്തിൽ 5 മില്ലി വേപ്പെണ്ണ കലർത്തി തളിക്കുക. ബാധിച്ച ഇലകൾ നീക്കം ചെയ്യുക.",
-          'mr-IN': "टोमॅटो पिकावर अर्ली ब्लाइट रोग आढळला आहे. उपाय: प्रति लिटर पाण्यात ५ मिली कडुलिंबाचे तेल मिसळून फवारणी करा. बाधित पाने काढून टाका.",
-          'bn-IN': "টমেটো গাছে আর্লি ব্লাইট রোগ দেখা গেছে। প্রতিকার: প্রতি লিটার জলে ৫ মিলি নিম তেল মিশিয়ে স্প্রে করুন। আক্রান্ত পাতাগুলো কেটে ফেলুন।",
-          'gu-IN': "ટામેટાના પાકમાં આગોતરો સુકારો જોવા મળ્યો છે. ઉપાય: એક લિટર પાણીમાં 5 મિલી લીમડાનું તેલ ભેળવી છંટકાવ કરો. રોગગ્રસ્ત પાંદડા દૂર કરો.",
-          'pa-IN': "ਟਮਾਟਰ ਦੀ ਫਸਲ ਵਿੱਚ ਅਗੇਤਾ ਝੁਲਸ ਰੋਗ ਹੈ। ਹੱਲ: ਪ੍ਰਤੀ ਲੀਟਰ ਪਾਣੀ ਵਿੱਚ 5 ਮਿਲੀਲੀਟਰ ਨਿੰਮ ਦਾ ਤੇਲ ਮਿਲਾ ਕੇ ਛਿੜਕਾਅ ਕਰੋ।",
-          'or-IN': "ଟମାଟୋ ଫସଲରେ ଆଗୁଆ ଝାଉଁଳା ରୋଗ ଦେଖାଦେଇଛି। ପ୍ରତିକାର: ପ୍ରତି ଲିଟର ପାଣିରେ ୫ ମିଲି ନିମ୍ବ ତେଲ ମିଶାଇ ସ୍ପ୍ରେ କରନ୍ତୁ।",
-          'ur-IN': "ٹماٹر کی فصل میں ارلی بلائٹ کی بیماری ہے۔ علاج: فی لیٹر پانی میں پانچ ملی لیٹر نیم کا تیل ملا کر اسپرے کریں۔"
-        }
-      },
-      {
-        crop: "Potato",
-        disease: "Late Blight",
-        conf: "93.4%",
-        advice: {
-          'en-IN': "Late Blight fungal pathogen detected on Potato leaves. Solution: Spray Mancozeb fungicide promptly. Ensure proper field drainage to stop water stagnation.",
-          'kn-IN': "ಆಲೂಗಡ್ಡೆಯಲ್ಲಿ ಲೇಟ್ ಬ್ಲೈಟ್ ರೋಗ ಕಂಡುಬಂದಿದೆ. ಪರಿಹಾರ: ಮ್ಯಾಂಕೋಜೆಬ್ ಶಿಲೀಂಧ್ರನಾಶಕವನ್ನು ತಕ್ಷಣ ಸಿಂಪಡಿಸಿ ಮತ್ತು ಹೊಲದಲ್ಲಿ ನೀರು ನಿಲ್ಲದಂತೆ ನೋಡಿಕೊಳ್ಳಿ.",
-          'te-IN': "బంగాళాదుంపలో లేట్ బ్లైట్ తెగులు గుర్తించబడింది. నివారణ: మాంకోజెబ్ మందును పిచికారీ చేయండి. పొలంలో ನೀరు నిల్వ ఉండకుండా చూసుకోండి.",
-          'ta-IN': "உருளைக்கிழங்கில் லேட் பிளைட் நோய் உள்ளது. தீர்வு: மேன்கோசெப் பூஞ்சைக்கொல்லியை தெளிக்கவும், தேங்கிய தண்ணீரை வெளியேற்றவும்.",
-          'hi-IN': "आलू में पछेती झुलसा रोग है। समाधान: मैंकोजेब कवकनाशी का तुरंत छिड़काव करें और खेत से पानी की निकासी सुनिश्चित करें।",
-          'ml-IN': "ഉരുളക്കിഴങ്ങിൽ ലേറ്റ് ബ്ലൈറ്റ് രോഗം ബാധിച്ചിരിക്കുന്നു. പരിഹാരം: മാങ്കോസെബ് കുമിൾനാശിനി തളിക്കുക, വെള്ളക്കെട്ട് ഒഴിവാക്കുക.",
-          'mr-IN': "बटाटा पिकावर लेट ब्लाइट रोगाचा प्रादुर्भाव झाला आहे. उपाय: मॅन्कोझेब बुरशीनाशकाची फवारणी करा आणि पाण्याचा निचरा व्यवस्थित करा.",
-          'bn-IN': "আলু গাছে লেইট ব্লাইট বা নাবি ধসা রোগ ধরা পড়েছে। প্রতিকার: ম্যানকোজেব ছত্রাকনাশক স্প্রে করুন এবং জমে থাকা জল নিষ্কাশন করুন।",
-          'gu-IN': "બટાટામાં પાછોતરો સુકારો રોગ જણાયો છે. ઉપાય: મેન્કોઝેબ ફૂગનાશકનો છંટકાવ કરો અને ખેતરમાંથી પાણી નિકાલની વ્યવસ્થા કરો.",
-          'pa-IN': "ਆਲੂਆਂ ਵਿੱਚ ਪਛੇਤਾ ਝੁਲਸ ਰੋਗ ਪਾਇਆ ਗਿਆ ਹੈ। ਹੱਲ: ਮੈਨਕੋਜ਼ੇਬ ਉੱਲੀਨਾਸ਼ਕ ਦਾ ਛਿੜਕਾਅ ਕਰੋ ਅਤੇ ਖੇਤ ਵਿੱਚ ਪਾਣੀ ਖੜ੍ਹਾ ਨਾ ਹੋਣ ਦਿਓ।",
-          'or-IN': "ଆଳୁ ଫସଲରେ ପଛୁଆ ଝାଉଁଳା ରୋଗ ଦେଖାଦେଇଛି। ପ୍ରତିକାର: ମାଙ୍କୋଜେବ୍ କବକନାଶକ ସ୍ପ୍ରେ କରନ୍ତୁ ଏବଂ ଜଳ ନିଷ୍କାସନ ଠିକ୍ କରନ୍ତୁ।",
-          'ur-IN': "آلو میں لیٹ بلائٹ بیماری پائی گئی ہے۔ علاج: مینکوزیب فنگسائیڈ کا اسپرے کریں اور کھیت میں پانی کھڑا نہ ہونے دیں۔"
-        }
-      },
-      {
-        crop: "Corn / Maize",
-        disease: "Healthy Crop",
-        conf: "99.1%",
-        advice: {
-          'en-IN': "Your Maize crop is healthy and disease-free. Maintain balanced nitrogen-phosphorus irrigation and check regularly for Fall Armyworm.",
-          'kn-IN': "ನಿಮ್ಮ ಮೆಕ್ಕೆಜೋಳದ ಬೆಳೆ ಸಂಪೂರ್ಣ ಆರೋಗ್ಯಕರವಾಗಿದೆ. ಯಾವುದೇ ರೋಗವಿಲ್ಲ. ನಿಯಮಿತವಾಗಿ ನೀರು ಮತ್ತು ಸಮತೋಲಿತ ಗೊಬ್ಬರ ನೀಡಿ.",
-          'te-IN': "మీ మొక్కజొన్న పంట ఆరోగ్యంగా ఉంది. ఎలాంటి తెగుళ్ళు లేవు. సరైన సమయంలో నీరు మరియు ఎరువులు అందించండి.",
-          'ta-IN': "உங்கள் மக்காச்சோளப் பயிர் ஆரோக்கியமாக உள்ளது. வழக்கமான நீர்ப்பாசனம் மற்றும் சீரான உரமிடுதல் மேற்கொள்ளவும்.",
-          'hi-IN': "आपकी मक्का की फसल पूरी तरह स्वस्थ है। कोई रोग नहीं है। संतुलित खाद और समय पर सिंचाई जारी रखें।",
-          'ml-IN': "നിങ്ങളുടെ ചോളവിള പൂർണ്ണമായും ആരോഗ്യകരമാണ്. കൃത്യസമയത്ത് വളവും വെള്ളവും നൽകുക.",
-          'mr-IN': "तुमचे मक्याचे पीक पूर्णपणे निरोगी आहे. वेळेवर पाणी आणि संतुलित खते द्या.",
-          'bn-IN': "আপনার ভুট্টা গাছ সম্পূর্ণ সুস্থ আছে। কোনো রোগ নেই। নিয়মিত সুষম সার ও জল প্রয়োগ বজায় রাখুন।",
-          'gu-IN': "તમારો મકાઈનો પાક તંદુરસ્ત છે. નિયમિત પાણી અને સંતુલિત ખાતર આપતા રહો.",
-          'pa-IN': "ਤੁਹਾਡੀ ਮੱਕੀ ਦੀ ਫਸਲ ਬਿਲਕੁਲ ਤੰਦਰੁਸਤ ਹੈ। ਸੰਤੁਲਿਤ ਖਾਦ ਅਤੇ ਸਿੰਚਾਈ ਜਾਰੀ ਰੱਖੋ।",
-          'or-IN': "ଆପଣଙ୍କ ମକା ଫସଲ ସମ୍ପୂର୍ଣ୍ଣ ସୁସ୍ଥ ଅଛି। ନିୟମିତ ପାଣି ଏବଂ ସନ୍ତୁଳିତ ଖତ ଦିଅନ୍ତୁ।",
-          'ur-IN': "آپ کی مکئی کی فصل بالکل صحت مند ہے۔ باقاعدگی سے پانی اور متوازن کھاد جاری رکھیں۔"
-        }
-      }
-    ];
-
-    function changeLanguage(val) {
-      currentLang = val;
-      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-      const voiceBtn = document.getElementById('voiceBtn');
-      if (voiceBtn) voiceBtn.classList.remove('speaking');
-      if (document.getElementById('resultBox').style.display === 'block') {
-        renderCurrentResult();
-      }
-    }
-
-    function renderCurrentResult() {
-      const data = db[activeDataIndex];
-      document.getElementById('resCrop').innerText = data.crop;
-      document.getElementById('resDisease').innerText = data.disease;
-      document.getElementById('resConfidence').innerText = data.conf + " Match";
-      
-      const treatmentText = data.advice[currentLang] || data.advice['en-IN'];
-      currentSpeechText = treatmentText;
-      document.getElementById('resRemedy').innerHTML =
+        <option value="kn-IN">ಕನ್ನಡ (Kann
