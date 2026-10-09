@@ -15,12 +15,12 @@
     h1 { font-size: 1.45rem; font-weight: 800; line-height: 1.25; margin-bottom: 6px; }
     p.subtitle { color: #8b949e; font-size: 0.82rem; line-height: 1.4; margin-bottom: 14px; }
     
-    /* Language Selection Section */
-    .lang-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 12px; margin-bottom: 14px; }
-    .lang-title { font-size: 0.85rem; font-weight: 600; color: #e6edf3; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-    .lang-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .lang-btn { background: #0d1117; border: 1px solid #30363d; color: #c9d1d9; padding: 8px 4px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; cursor: pointer; text-align: center; }
-    .lang-btn.active { background: #238636; color: #fff; border-color: #3fb950; }
+    /* Prominent Language Selector Step 1 */
+    .lang-card { background: #161b22; border: 2px solid #238636; border-radius: 12px; padding: 14px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(35, 134, 54, 0.15); }
+    .lang-title { font-size: 0.9rem; font-weight: 700; color: #3fb950; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+    .lang-subtitle { font-size: 0.75rem; color: #8b949e; margin-bottom: 10px; }
+    .lang-select-box { width: 100%; padding: 12px; border-radius: 8px; background: #0d1117; border: 1px solid #30363d; color: #f0f6fc; font-size: 0.95rem; font-weight: 600; outline: none; cursor: pointer; }
+    .lang-select-box:focus { border-color: #3fb950; }
 
     .scanner-card { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 14px; margin-bottom: 14px; }
     .dropzone { border: 2px dashed #238636; border-radius: 12px; background: #0d1117; padding: 20px 10px; text-align: center; position: relative; overflow: hidden; cursor: pointer; }
@@ -32,13 +32,11 @@
 
     .diagnose-btn { display: none; width: 100%; background: #238636; color: white; border: none; padding: 13px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; margin-top: 12px; cursor: pointer; }
     
-    /* Result Box Styling */
     .result-box { display: none; background: #0d1117; border: 1px solid #238636; border-radius: 12px; padding: 14px; margin-top: 14px; }
     .res-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
     .badge { background: #3fb950; color: #0d1117; font-weight: 700; font-size: 0.72rem; padding: 3px 8px; border-radius: 10px; }
     .remedy { background: #161b22; border-left: 3px solid #3fb950; padding: 10px; border-radius: 6px; margin: 10px 0; font-size: 0.82rem; line-height: 1.4; color: #c9d1d9; }
     
-    /* Voice Speak Button */
     .voice-btn { width: 100%; background: #1f6feb; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 0.88rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .voice-btn:hover { background: #388bfd; }
     .voice-btn.speaking { background: #da3633; }
@@ -57,23 +55,32 @@
     <div class="navbar">
       <div class="brand">
         <div class="logo-badge">🌿</div>
-        <div>AgriLens <span style="font-size:0.68rem; background:#1f3b2b; color:#3fb950; padding:2px 6px; border-radius:4px;">AI VOICE</span></div>
+        <div>AgriLens <span style="font-size:0.68rem; background:#1f3b2b; color:#3fb950; padding:2px 6px; border-radius:4px;">MULTI-VOICE</span></div>
       </div>
     </div>
 
     <div class="lang-card">
-      <div class="lang-title">🗣️ Select Voice & Advisory Language:</div>
-      <div class="lang-grid">
-        <button type="button" class="lang-btn" onclick="selectLang('te-IN', this)">తెలుగు<br>(Telugu)</button>
-        <button type="button" class="lang-btn active" onclick="selectLang('kn-IN', this)">ಕನ್ನಡ<br>(Kannada)</button>
-        <button type="button" class="lang-btn" onclick="selectLang('ta-IN', this)">தமிழ்<br>(Tamil)</button>
-        <button type="button" class="lang-btn" onclick="selectLang('hi-IN', this)">हिंदी<br>(Hindi)</button>
-      </div>
+      <div class="lang-title">🌐 Step 1: Choose Your Language / ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</div>
+      <div class="lang-subtitle">Select language for speech synthesis and advisory remedies:</div>
+      <select id="languageSelect" class="lang-select-box" onchange="changeLanguage(this.value)">
+        <option value="en-IN" selected>English (India)</option>
+        <option value="kn-IN">ಕನ್ನಡ (Kannada)</option>
+        <option value="te-IN">తెలుగు (Telugu)</option>
+        <option value="ta-IN">தமிழ் (Tamil)</option>
+        <option value="hi-IN">हिन्दी (Hindi)</option>
+        <option value="ml-IN">മലയാളം (Malayalam)</option>
+        <option value="mr-IN">मराठी (Marathi)</option>
+        <option value="bn-IN">বাংলা (Bengali)</option>
+        <option value="gu-IN">ગુજરાતી (Gujarati)</option>
+        <option value="pa-IN">ਪੰਜਾਬੀ (Punjabi)</option>
+        <option value="or-IN">ଓଡ଼ିଆ (Odia)</option>
+        <option value="ur-IN">اردو (Urdu)</option>
+      </select>
     </div>
 
     <div class="terminal-tag">LIVE DIAGNOSIS ENGINE</div>
     <h1>AI Leaf Pathology Scanner</h1>
-    <p class="subtitle">Upload or take a photo of a crop leaf. The system will detect disease and read out remedies in your chosen language.</p>
+    <p class="subtitle">Step 2: Upload or capture a leaf photo to diagnose crop diseases and listen to voice remedies.</p>
 
     <div class="scanner-card">
       <div class="dropzone" id="dropArea">
@@ -121,69 +128,80 @@
   </div>
 
   <script>
-    let currentLang = 'kn-IN';
+    let currentLang = 'en-IN';
     let currentSpeechText = '';
+    let activeDataIndex = 0;
 
-    // Multi-language dataset with regional text & voice readouts
+    // Pan-Indian language database covering English & major Indian languages
     const db = [
       {
-        crop: "Tomato (ಟೊಮೇಟೊ / టమోటా / टमाटर)",
-        disease: "Early Blight (ಹಳದಿ ಮಚ್ಚೆ ರೋಗ / ಮುಂಚಿನ ರೋಗ)",
+        crop: "Tomato",
+        disease: "Early Blight",
         conf: "95.6%",
         advice: {
+          'en-IN': "Early Blight detected on Tomato foliage. Solution: Spray Organic Neem Oil (5ml per liter of water) during early morning hours. Prune and destroy lower infected leaves immediately.",
           'kn-IN': "ಟೊಮೇಟೊ ಗಿಡದಲ್ಲಿ ಮುಂಚಿನ ರೋಗ ಪತ್ತೆಯಾಗಿದೆ. ಪರಿಹಾರ: ಒಂದು ಲೀಟರ್ ನೀರಿಗೆ 5 ಎಂಎಲ್ ಬೇವಿನ ಎಣ್ಣೆ ಬೆರೆಸಿ ಸಿಂಪಡಿಸಿ. ರೋಗ ಪೀಡಿತ ಎಲೆಗಳನ್ನು ತೆಗೆದುಹಾಕಿ.",
           'te-IN': "టమోటా పంటలో ఎర్లీ బ్లైట్ తెగులు ఉంది. నివారణ: లీటరు నీటికి ఐదు మిల్లీ లీటర్ల వేపనూనె కలిపి పిచికారీ చేయండి. తెగులు సోకిన ఆకులను తీసివేయండి.",
           'ta-IN': "தக்காளி பயிரில் ஆரம்பகால இலைக்கருகல் நோய் கண்டறியப்பட்டுள்ளது. தீர்வு: ஒரு லிட்டர் தண்ணீருக்கு 5 மிலி வேப்பெண்ணெய் கலந்து தெளிக்கவும்.",
-          'hi-IN': "टमाटर में अगेती झुलसा रोग पाया गया है। समाधान: एक लीटर पानी में पांच मिलीलीटर नीम का तेल मिलाकर छिड़काव करें। प्रभावित पत्तियों को हटा दें।"
+          'hi-IN': "टमाटर में अगेती झुलसा रोग पाया गया है। समाधान: एक लीटर पानी में 5 मिली नीम का तेल मिलाकर छिड़कें। प्रभावित पत्तियों को तुरंत हटा दें।",
+          'ml-IN': "തക്കാളി ചെടിയിൽ ഏർലി ബ്ലൈറ്റ് രോഗം കണ്ടെത്തി. പരിഹാരം: ഒരു ലിറ്റർ വെള്ളത്തിൽ 5 മില്ലി വേപ്പെണ്ണ കലർത്തി തളിക്കുക. ബാധിച്ച ഇലകൾ നീക്കം ചെയ്യുക.",
+          'mr-IN': "टोमॅटो पिकावर अर्ली ब्लाइट रोग आढळला आहे. उपाय: प्रति लिटर पाण्यात ५ मिली कडुलिंबाचे तेल मिसळून फवारणी करा. बाधित पाने काढून टाका.",
+          'bn-IN': "টমেটো গাছে আর্লি ব্লাইট রোগ দেখা গেছে। প্রতিকার: প্রতি লিটার জলে ৫ মিলি নিম তেল মিশিয়ে স্প্রে করুন। আক্রান্ত পাতাগুলো কেটে ফেলুন।",
+          'gu-IN': "ટામેટાના પાકમાં આગોતરો સુકારો જોવા મળ્યો છે. ઉપાય: એક લિટર પાણીમાં 5 મિલી લીમડાનું તેલ ભેળવી છંટકાવ કરો. રોગગ્રસ્ત પાંદડા દૂર કરો.",
+          'pa-IN': "ਟਮਾਟਰ ਦੀ ਫਸਲ ਵਿੱਚ ਅਗੇਤਾ ਝੁਲਸ ਰੋਗ ਹੈ। ਹੱਲ: ਪ੍ਰਤੀ ਲੀਟਰ ਪਾਣੀ ਵਿੱਚ 5 ਮਿਲੀਲੀਟਰ ਨਿੰਮ ਦਾ ਤੇਲ ਮਿਲਾ ਕੇ ਛਿੜਕਾਅ ਕਰੋ।",
+          'or-IN': "ଟମାଟୋ ଫସଲରେ ଆଗୁଆ ଝାଉଁଳା ରୋଗ ଦେଖାଦେଇଛି। ପ୍ରତିକାର: ପ୍ରତି ଲିଟର ପାଣିରେ ୫ ମିଲି ନିମ୍ବ ତେଲ ମିଶାଇ ସ୍ପ୍ରେ କରନ୍ତୁ।",
+          'ur-IN': "ٹماٹر کی فصل میں ارلی بلائٹ کی بیماری ہے۔ علاج: فی لیٹر پانی میں پانچ ملی لیٹر نیم کا تیل ملا کر اسپرے کریں۔"
         }
       },
       {
-        crop: "Potato (ಆಲೂಗಡ್ಡೆ / బంగాళాదుంప / आलू)",
-        disease: "Late Blight (ಲೇಟ್ ಬ್ಲೈಟ್ / లేట్ బ్లైట్ తెగులు)",
+        crop: "Potato",
+        disease: "Late Blight",
         conf: "93.4%",
         advice: {
+          'en-IN': "Late Blight fungal pathogen detected on Potato leaves. Solution: Spray Mancozeb fungicide promptly. Ensure proper field drainage to stop water stagnation.",
           'kn-IN': "ಆಲೂಗಡ್ಡೆಯಲ್ಲಿ ಲೇಟ್ ಬ್ಲೈಟ್ ರೋಗ ಕಂಡುಬಂದಿದೆ. ಪರಿಹಾರ: ಮ್ಯಾಂಕೋಜೆಬ್ ಶಿಲೀಂಧ್ರನಾಶಕವನ್ನು ತಕ್ಷಣ ಸಿಂಪಡಿಸಿ ಮತ್ತು ಹೊಲದಲ್ಲಿ ನೀರು ನಿಲ್ಲದಂತೆ ನೋಡಿಕೊಳ್ಳಿ.",
-          'te-IN': "బంగాళాదుంపలో లేట్ బ్లైట్ తెగులు గుర్తించబడింది. నివారణ: మాంకోజెబ్ మందును పిచికారీ చేయండి. పొలంలో నీరు నిల్వ ఉండకుండా చూసుకోండి.",
+          'te-IN': "బంగాళాదుంపలో లేట్ బ్లైట్ తెగులు గుర్తించబడింది. నివారణ: మాంకోజెబ్ మందును పిచికారీ చేయండి. పొలంలో ನೀరు నిల్వ ఉండకుండా చూసుకోండి.",
           'ta-IN': "உருளைக்கிழங்கில் லேட் பிளைட் நோய் உள்ளது. தீர்வு: மேன்கோசெப் பூஞ்சைக்கொல்லியை தெளிக்கவும், தேங்கிய தண்ணீரை வெளியேற்றவும்.",
-          'hi-IN': "आलू में पछेती झुलसा रोग है। समाधान: मैंकोजेब कवकनाशी का तुरंत छिड़काव करें और खेत में जलभराव न होने दें।"
+          'hi-IN': "आलू में पछेती झुलसा रोग है। समाधान: मैंकोजेब कवकनाशी का तुरंत छिड़काव करें और खेत से पानी की निकासी सुनिश्चित करें।",
+          'ml-IN': "ഉരുളക്കിഴങ്ങിൽ ലേറ്റ് ബ്ലൈറ്റ് രോഗം ബാധിച്ചിരിക്കുന്നു. പരിഹാരം: മാങ്കോസെബ് കുമിൾനാശിനി തളിക്കുക, വെള്ളക്കെട്ട് ഒഴിവാക്കുക.",
+          'mr-IN': "बटाटा पिकावर लेट ब्लाइट रोगाचा प्रादुर्भाव झाला आहे. उपाय: मॅन्कोझेब बुरशीनाशकाची फवारणी करा आणि पाण्याचा निचरा व्यवस्थित करा.",
+          'bn-IN': "আলু গাছে লেইট ব্লাইট বা নাবি ধসা রোগ ধরা পড়েছে। প্রতিকার: ম্যানকোজেব ছত্রাকনাশক স্প্রে করুন এবং জমে থাকা জল নিষ্কাশন করুন।",
+          'gu-IN': "બટાટામાં પાછોતરો સુકારો રોગ જણાયો છે. ઉપાય: મેન્કોઝેબ ફૂગનાશકનો છંટકાવ કરો અને ખેતરમાંથી પાણી નિકાલની વ્યવસ્થા કરો.",
+          'pa-IN': "ਆਲੂਆਂ ਵਿੱਚ ਪਛੇਤਾ ਝੁਲਸ ਰੋਗ ਪਾਇਆ ਗਿਆ ਹੈ। ਹੱਲ: ਮੈਨਕੋਜ਼ੇਬ ਉੱਲੀਨਾਸ਼ਕ ਦਾ ਛਿੜਕਾਅ ਕਰੋ ਅਤੇ ਖੇਤ ਵਿੱਚ ਪਾਣੀ ਖੜ੍ਹਾ ਨਾ ਹੋਣ ਦਿਓ।",
+          'or-IN': "ଆଳୁ ଫସଲରେ ପଛୁଆ ଝାଉଁଳା ରୋଗ ଦେଖାଦେଇଛି। ପ୍ରତିକାର: ମାଙ୍କୋଜେବ୍ କବକନାଶକ ସ୍ପ୍ରେ କରନ୍ତୁ ଏବଂ ଜଳ ନିଷ୍କାସନ ଠିକ୍ କରନ୍ତୁ।",
+          'ur-IN': "آلو میں لیٹ بلائٹ بیماری پائی گئی ہے۔ علاج: مینکوزیب فنگسائیڈ کا اسپرے کریں اور کھیت میں پانی کھڑا نہ ہونے دیں۔"
         }
       },
       {
-        crop: "Corn / Maize (ಮೆಕ್ಕೆಜೋಳ / మొక్కజొన్న / मक्का)",
-        disease: "Healthy Crop (ಆರೋಗ್ಯಕರ ಬೆಳೆ / ఆరోగ్యకరమైన పంట)",
+        crop: "Corn / Maize",
+        disease: "Healthy Crop",
         conf: "99.1%",
         advice: {
+          'en-IN': "Your Maize crop is healthy and disease-free. Maintain balanced nitrogen-phosphorus irrigation and check regularly for Fall Armyworm.",
           'kn-IN': "ನಿಮ್ಮ ಮೆಕ್ಕೆಜೋಳದ ಬೆಳೆ ಸಂಪೂರ್ಣ ಆರೋಗ್ಯಕರವಾಗಿದೆ. ಯಾವುದೇ ರೋಗವಿಲ್ಲ. ನಿಯಮಿತವಾಗಿ ನೀರು ಮತ್ತು ಸಮತೋಲಿತ ಗೊಬ್ಬರ ನೀಡಿ.",
           'te-IN': "మీ మొక్కజొన్న పంట ఆరోగ్యంగా ఉంది. ఎలాంటి తెగుళ్ళు లేవు. సరైన సమయంలో నీరు మరియు ఎరువులు అందించండి.",
-          'ta-IN': "உங்கள் மக்காச்சோளப் பயிர் ஆரோக்கியமாக உள்ளது. எந்த நோயும் இல்லை. வழக்கமான நீர்ப்பாசனம் செய்யவும்.",
-          'hi-IN': "आपकी मक्का की फसल पूरी तरह स्वस्थ है। कोई रोग नहीं है। नियमित रूप से संतुलित खाद और पानी दें।"
-        }
-      },
-      {
-        crop: "Chilli (ಮೆಣಸಿನಕಾಯಿ / మిరప / मिर्च)",
-        disease: "Leaf Curl Virus (ಎಲೆ ಮುದುರು ರೋಗ / ఆకు ముడుత)",
-        conf: "91.8%",
-        advice: {
-          'kn-IN': "ಮೆಣಸಿನ ಗಿಡದಲ್ಲಿ ಎಲೆ ಮುದುರು ರೋಗ ಪತ್ತೆಯಾಗಿದೆ. ಪರಿಹಾರ: ಬಿಳಿ ನೊಣ ನಿಯಂತ್ರಣಕ್ಕಾಗಿ ಹಳದಿ ಜಿಗುಟು ಬಲೆಗಳನ್ನು ಬಳಸಿ ಮತ್ತು ಕೀಟನಾಶಕ ಸಿಂಪಡಿಸಿ.",
-          'te-IN': "మిరప పంటలో ఆకు ముడుత తెగులు ఉంది. నివారణ: తెల్లదోమల నివారణకు పసుపు రంగు జిగురు అట్టలను అమర్చండి మరియు నివారణ మందు పిచికారీ చేయండి.",
-          'ta-IN': "மிளகாய் பயிரில் இலை சுருள் நோய் உள்ளது. தீர்வு: வெள்ளை ஈக்களைக் கட்டுப்படுத்த மஞ்சள் நிற ஒட்டும் பொறிகளைப் பயன்படுத்தவும்.",
-          'hi-IN': "मिर्च में पत्ती मरोड़ रोग पाया गया है। समाधान: सफेद मक्खी नियंत्रण के लिए पीले चिपचिपे ट्रैप लगाएं और कीटनाशक छिड़कें।"
+          'ta-IN': "உங்கள் மக்காச்சோளப் பயிர் ஆரோக்கியமாக உள்ளது. வழக்கமான நீர்ப்பாசனம் மற்றும் சீரான உரமிடுதல் மேற்கொள்ளவும்.",
+          'hi-IN': "आपकी मक्का की फसल पूरी तरह स्वस्थ है। कोई रोग नहीं है। संतुलित खाद और समय पर सिंचाई जारी रखें।",
+          'ml-IN': "നിങ്ങളുടെ ചോളവിള പൂർണ്ണമായും ആരോഗ്യകരമാണ്. കൃത്യസമയത്ത് വളവും വെള്ളവും നൽകുക.",
+          'mr-IN': "तुमचे मक्याचे पीक पूर्णपणे निरोगी आहे. वेळेवर पाणी आणि संतुलित खते द्या.",
+          'bn-IN': "আপনার ভুট্টা গাছ সম্পূর্ণ সুস্থ আছে। কোনো রোগ নেই। নিয়মিত সুষম সার ও জল প্রয়োগ বজায় রাখুন।",
+          'gu-IN': "તમારો મકાઈનો પાક તંદુરસ્ત છે. નિયમિત પાણી અને સંતુલિત ખાતર આપતા રહો.",
+          'pa-IN': "ਤੁਹਾਡੀ ਮੱਕੀ ਦੀ ਫਸਲ ਬਿਲਕੁਲ ਤੰਦਰੁਸਤ ਹੈ। ਸੰਤੁਲਿਤ ਖਾਦ ਅਤੇ ਸਿੰਚਾਈ ਜਾਰੀ ਰੱਖੋ।",
+          'or-IN': "ଆପଣଙ୍କ ମକା ଫସଲ ସମ୍ପୂର୍ଣ୍ଣ ସୁସ୍ଥ ଅଛି। ନିୟମିତ ପାଣି ଏବଂ ସନ୍ତୁଳିତ ଖତ ଦିଅନ୍ତୁ।",
+          'ur-IN': "آپ کی مکئی کی فصل بالکل صحت مند ہے۔ باقاعدگی سے پانی اور متوازن کھاد جاری رکھیں۔"
         }
       }
     ];
 
-    function selectLang(code, btn) {
-      currentLang = code;
-      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+    function changeLanguage(val) {
+      currentLang = val;
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-      // If a result is already visible, update the language immediately
+      const voiceBtn = document.getElementById('voiceBtn');
+      if (voiceBtn) voiceBtn.classList.remove('speaking');
       if (document.getElementById('resultBox').style.display === 'block') {
         renderCurrentResult();
       }
     }
-
-    let activeDataIndex = 0;
 
     function renderCurrentResult() {
       const data = db[activeDataIndex];
@@ -191,91 +209,6 @@
       document.getElementById('resDisease').innerText = data.disease;
       document.getElementById('resConfidence').innerText = data.conf + " Match";
       
-      const treatmentText = data.advice[currentLang] || data.advice['kn-IN'];
+      const treatmentText = data.advice[currentLang] || data.advice['en-IN'];
       currentSpeechText = treatmentText;
-      document.getElementById('resRemedy').innerHTML = `<strong>ಪರಿಹಾರ / నివారణ / Treatment:</strong><br/>${treatmentText}`;
-      
-      const resBox = document.getElementById('resultBox');
-      resBox.style.display = 'block';
-      resBox.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function runDiagnosis(index) {
-      activeDataIndex = index;
-      renderCurrentResult();
-    }
-
-    const fileInput = document.getElementById('nativeFile');
-    const previewImg = document.getElementById('previewImg');
-    const statusText = document.getElementById('statusText');
-    const diagnoseBtn = document.getElementById('diagnoseBtn');
-
-    fileInput.addEventListener('change', function(e) {
-      const file = e.target.files && e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          previewImg.src = evt.target.result;
-          previewImg.style.display = 'block';
-          statusText.innerText = "Selected: " + file.name.substring(0, 18);
-          diagnoseBtn.style.display = 'block';
-          document.getElementById('resultBox').style.display = 'none';
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    diagnoseBtn.addEventListener('click', function() {
-      diagnoseBtn.innerText = "Analyzing Leaf with AI...";
-      diagnoseBtn.disabled = true;
-      setTimeout(() => {
-        diagnoseBtn.innerText = "Run AI Pathology Diagnosis";
-        diagnoseBtn.disabled = false;
-        // Randomly pick a disease from the dataset
-        activeDataIndex = Math.floor(Math.random() * db.length);
-        renderCurrentResult();
-      }, 1000);
-    });
-
-    // Voice Readout Engine using Web Speech API
-    function toggleVoice() {
-      if (!('speechSynthesis' in window)) {
-        alert("Sorry, your browser does not support voice text-to-speech.");
-        return;
-      }
-
-      const synth = window.speechSynthesis;
-      const voiceBtn = document.getElementById('voiceBtn');
-      const voiceBtnLabel = document.getElementById('voiceBtnLabel');
-
-      if (synth.speaking) {
-        synth.cancel();
-        voiceBtn.classList.remove('speaking');
-        voiceBtnLabel.innerText = "Listen Solution in Voice";
-        return;
-      }
-
-      const utterance = new SpeechSynthesisUtterance(currentSpeechText);
-      utterance.lang = currentLang;
-      utterance.rate = 0.9; // clear, comfortable pace for farmers
-
-      utterance.onstart = function() {
-        voiceBtn.classList.add('speaking');
-        voiceBtnLabel.innerText = "Playing Voice... Tap to Stop";
-      };
-
-      utterance.onend = function() {
-        voiceBtn.classList.remove('speaking');
-        voiceBtnLabel.innerText = "Listen Solution in Voice";
-      };
-
-      utterance.onerror = function() {
-        voiceBtn.classList.remove('speaking');
-        voiceBtnLabel.innerText = "Listen Solution in Voice";
-      };
-
-      synth.speak(utterance);
-    }
-  </script>
-</body>
-</html>
+      document.getElementById('resRemedy').innerHTML =
