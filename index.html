@@ -3,68 +3,82 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgriLens AI - Voice Leaf Scanner</title>
+  <title>AgriLens AI</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #0d1117; color: #f0f6fc; padding: 14px; min-height: 100vh; display: flex; justify-content: center; }
-    .container { width: 100%; max-width: 480px; }
-    .navbar { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; margin-bottom: 12px; }
-    .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.15rem; color: #fff; }
-    .logo-badge { background: #238636; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-    .terminal-tag { display: inline-block; background: #0f2d1e; color: #3fb950; border: 1px solid #238636; padding: 3px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 8px; }
-    h1 { font-size: 1.45rem; font-weight: 800; line-height: 1.25; margin-bottom: 6px; }
-    p.subtitle { color: #8b949e; font-size: 0.82rem; line-height: 1.4; margin-bottom: 14px; }
-    
-    .lang-card { background: #161b22; border: 2px solid #238636; border-radius: 12px; padding: 14px; margin-bottom: 16px; }
-    .lang-title { font-size: 0.9rem; font-weight: 700; color: #3fb950; margin-bottom: 4px; }
-    .lang-subtitle { font-size: 0.75rem; color: #8b949e; margin-bottom: 10px; }
-    .lang-select-box { width: 100%; padding: 12px; border-radius: 8px; background: #0d1117; border: 1px solid #30363d; color: #f0f6fc; font-size: 0.95rem; font-weight: 600; outline: none; cursor: pointer; }
-    .lang-select-box:focus { border-color: #3fb950; }
-
-    .scanner-card { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 14px; margin-bottom: 14px; }
-    
-    .upload-btn-container { margin-bottom: 12px; }
-    .file-input { display: none; }
-    .custom-upload-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed #238636; border-radius: 12px; background: #0d1117; padding: 22px 12px; cursor: pointer; text-align: center; }
-    .custom-upload-btn:active { background: #161b22; }
-    .camera-icon { background: #1f3b2b; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #3fb950; margin-bottom: 8px; }
-    .drop-text { font-size: 0.9rem; font-weight: 600; color: #f0f6fc; margin-bottom: 4px; }
-    .drop-sub { font-size: 0.75rem; color: #8b949e; }
-    
-    #previewImg { width: 100%; max-height: 220px; object-fit: contain; border-radius: 8px; display: none; margin-top: 12px; }
-
-    .diagnose-btn { display: none; width: 100%; background: #238636; color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; margin-top: 12px; cursor: pointer; }
-    
-    .result-box { display: none; background: #0d1117; border: 1px solid #238636; border-radius: 12px; padding: 14px; margin-top: 14px; }
-    .res-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .badge { background: #3fb950; color: #0d1117; font-weight: 700; font-size: 0.72rem; padding: 3px 8px; border-radius: 10px; }
-    .remedy { background: #161b22; border-left: 3px solid #3fb950; padding: 10px; border-radius: 6px; margin: 10px 0; font-size: 0.82rem; line-height: 1.4; color: #c9d1d9; }
-    
-    .voice-btn { width: 100%; background: #1f6feb; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 0.88rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .voice-btn:hover { background: #388bfd; }
-    .voice-btn.speaking { background: #da3633; }
-
-    .samples-header { font-size: 0.72rem; font-weight: 700; color: #8b949e; letter-spacing: 0.5px; margin: 16px 0 8px; text-transform: uppercase; }
-    .samples-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .sample-card { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 6px; text-align: center; cursor: pointer; }
-    .sample-img { width: 100%; height: 50px; border-radius: 4px; object-fit: cover; margin-bottom: 4px; background: #21262d; }
-    .sample-title { font-size: 0.72rem; font-weight: 600; line-height: 1.2; margin-bottom: 2px; }
-    .sample-tag { font-size: 0.62rem; color: #f85149; font-weight: 600; }
-    .sample-tag.healthy { color: #3fb950; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body { background: #121212; color: #fff; padding: 15px; }
+    .card { background: #1e1e1e; border-radius: 12px; padding: 16px; margin-bottom: 15px; border: 1px solid #333; }
+    h2 { font-size: 1.2rem; color: #4ade80; margin-bottom: 8px; }
+    label { display: block; font-size: 0.9rem; margin-bottom: 6px; color: #aaa; }
+    select { width: 100%; padding: 12px; font-size: 1rem; background: #2a2a2a; color: #fff; border: 1px solid #444; border-radius: 8px; margin-bottom: 12px; }
+    input[type="file"] { width: 100%; padding: 10px; background: #2a2a2a; border-radius: 8px; border: 1px solid #444; color: #fff; font-size: 0.9rem; }
+    img#preview { width: 100%; max-height: 200px; object-fit: contain; margin-top: 12px; border-radius: 8px; display: none; }
+    button.btn { width: 100%; padding: 14px; font-size: 1rem; font-weight: bold; border-radius: 8px; border: none; cursor: pointer; margin-top: 10px; }
+    .btn-green { background: #22c55e; color: #000; }
+    .btn-blue { background: #3b82f6; color: #fff; }
+    .result { display: none; margin-top: 15px; padding: 12px; background: #262626; border-left: 4px solid #4ade80; border-radius: 4px; }
+    .sample-btn { padding: 8px 12px; background: #333; color: #fff; border: 1px solid #555; border-radius: 6px; margin: 4px; cursor: pointer; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="navbar">
-      <div class="brand">
-        <div class="logo-badge">🌿</div>
-        <div>AgriLens <span style="font-size:0.68rem; background:#1f3b2b; color:#3fb950; padding:2px 6px; border-radius:4px;">AI VOICE</span></div>
-      </div>
-    </div>
 
-    <div class="lang-card">
-      <div class="lang-title">🌐 Step 1: Choose Language / ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</div>
-      <div class="lang-subtitle">Select language for speech synthesis and advisory remedies:</div>
-      <select id="languageSelect" class="lang-select-box" onchange="changeLanguage(this.value)">
-        <option value="en-IN" selected>English (India)</option>
-        <option value="kn-IN">ಕನ್ನಡ (Kann
+  <div class="card">
+    <h2>1. Select Language / ಭಾಷೆ</h2>
+    <select id="lang">
+      <option value="en-IN">English</option>
+      <option value="kn-IN" selected>ಕನ್ನಡ (Kannada)</option>
+      <option value="te-IN">తెలుగు (Telugu)</option>
+      <option value="ta-IN">தமிழ் (Tamil)</option>
+      <option value="hi-IN">हिन्दी (Hindi)</option>
+      <option value="ml-IN">മലയാളം (Malayalam)</option>
+      <option value="mr-IN">मराठी (Marathi)</option>
+      <option value="bn-IN">বাংলা (Bengali)</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. Upload Leaf Photo</h2>
+    <input type="file" id="filePicker" accept="image/*" />
+    <img id="preview" alt="Preview" />
+    <button class="btn btn-green" id="diagnoseBtn" style="display:none;" onclick="startDiagnosis()">Run Diagnosis</button>
+  </div>
+
+  <div class="card">
+    <h2>Or Test Quick Samples</h2>
+    <button class="sample-btn" onclick="testSample(0)">Tomato</button>
+    <button class="sample-btn" onclick="testSample(1)">Potato</button>
+    <button class="sample-btn" onclick="testSample(2)">Corn</button>
+  </div>
+
+  <div class="result" id="resultCard">
+    <h3 id="resCrop" style="color:#4ade80;"></h3>
+    <p id="resDisease" style="margin: 6px 0; font-weight: bold;"></p>
+    <p id="resAdvice" style="color: #ddd; font-size: 0.95rem; line-height: 1.4;"></p>
+    <button class="btn btn-blue" id="speakBtn" onclick="speakAdvice()">🔊 Listen Solution</button>
+  </div>
+
+  <script>
+    const database = [
+      {
+        crop: "Tomato",
+        disease: "Early Blight (ಹಳದಿ ಮಚ್ಚೆ ರೋಗ)",
+        advice: {
+          'en-IN': "Early Blight detected. Spray Neem Oil 5ml per liter of water. Remove infected leaves.",
+          'kn-IN': "ಟೊಮೇಟೊ ಗಿಡದಲ್ಲಿ ರೋಗ ಪತ್ತೆಯಾಗಿದೆ. ಪರಿಹಾರ: ಒಂದು ಲೀಟರ್ ನೀರಿಗೆ 5 ಎಂಎಲ್ ಬೇವಿನ ಎಣ್ಣೆ ಬೆರೆಸಿ ಸಿಂಪಡಿಸಿ. ಹಾನಿಗೊಳಗಾದ ಎಲೆಗಳನ್ನು ಕತ್ತರಿಸಿ ತೆಗೆಯಿರಿ.",
+          'te-IN': "టమోటా పంటలో తెగులు ఉంది. నివారణ: లీటరు నీటికి ఐదు మిల్లీ లీటర్ల వేపనూనె కలిపి పిచికారీ చేయండి.",
+          'ta-IN': "தக்காளி பயிரில் நோய் கண்டறியப்பட்டுள்ளது. ஒரு லிட்டர் தண்ணீருக்கு 5 மிலி வேப்பெண்ணெய் கலந்து தெளிக்கவும்.",
+          'hi-IN': "टमाटर में झुलसा रोग है। समाधान: 1 लीटर पानी में 5 मिली नीम का तेल मिलाकर छिड़कें।",
+          'ml-IN': "തക്കാളി ചെടിയിൽ രോഗം കണ്ടെത്തി. ഒരു ലിറ്റർ വെള്ളത്തിൽ 5 മില്ലി വേപ്പെണ്ണ കലർത്തി തളിക്കുക.",
+          'mr-IN': "टोमॅटोवर रोग आढळला आहे. प्रति लिटर पाण्यात ५ मिली कडुलिंब तेल मिसळून फवारणी करा.",
+          'bn-IN': "টমেটো গাছে রোগ দেখা গেছে। প্রতি লিটার জলে ৫ মিলি নিম তেল স্প্রে করুন।"
+        }
+      },
+      {
+        crop: "Potato",
+        disease: "Late Blight (ಲೇಟ್ ಬ್ಲೈಟ್)",
+        advice: {
+          'en-IN': "Late Blight detected. Spray Mancozeb fungicide immediately and keep the soil drained.",
+          'kn-IN': "ಆಲೂಗಡ್ಡೆಯಲ್ಲಿ ಲೇಟ್ ಬ್ಲೈಟ್ ರೋಗ ಕಂಡುಬಂದಿದೆ. ಮ್ಯಾಂಕೋಜೆಬ್ ಶಿಲೀಂಧ್ರನಾಶಕ ಸಿಂಪಡಿಸಿ ಮತ್ತು ಹೊಲದಲ್ಲಿ ನೀರು ನಿಲ್ಲದಂತೆ ನೋಡಿಕೊಳ್ಳಿ.",
+          'te-IN': "బంగాళాదుంపలో లేట్ బ్లైట్ ఉంది. మాంకోజెబ్ మందు పిచಿಕారీ చేయండి. నీరు నిల్వ ఉండకుండా చూసుకోండి.",
+          'ta-IN': "உருளைக்கிழங்கில் லேட் பிளைட் நோய் உள்ளது. மேன்கோசெப் பூஞ்சைக்கொல்லியை தெளிக்கவும்.",
+          'hi-IN': "आलू में पछेती झुलसा रोग है। तुरंत
